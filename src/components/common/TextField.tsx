@@ -10,12 +10,12 @@ interface TextFieldProps {
   button?: React.ReactNode;
 }
 
-function TextField({ id, type, label, placeholder, button, helperText }: TextFieldProps) {
+const TextField = ({ id, type, label, placeholder, button, helperText }: TextFieldProps) => {
   return (
     <TextFieldStyle>
       <label htmlFor={id}>{label}</label>
       {button ? (
-        <div>
+        <div className=''>
           <Input id={id} type={type} placeholder={placeholder} />
           {button}
         </div>
@@ -25,7 +25,7 @@ function TextField({ id, type, label, placeholder, button, helperText }: TextFie
       {helperText && <span className='helper-text'>{helperText}</span>}
     </TextFieldStyle>
   );
-}
+};
 
 const TextFieldStyle = styled.fieldset`
   display: flex;
@@ -37,6 +37,11 @@ const TextFieldStyle = styled.fieldset`
     ${({ theme: { typography } }) => typography.bodysmall};
     font-weight: ${({ theme: { fontweight } }) => fontweight.medium};
     color: ${({ theme: { color } }) => color.gray[600]};
+  }
+
+  label + div {
+    display: flex;
+    gap: 12px;
   }
 
   input {

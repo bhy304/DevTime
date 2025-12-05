@@ -7,7 +7,7 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
 }
 
-function Checkbox({ id, name, label, ...props }: CheckboxProps) {
+const Checkbox = ({ id, name, label, ...props }: CheckboxProps) => {
   const generatedId = useId();
   const checkboxId = id || generatedId;
   return (
@@ -16,7 +16,7 @@ function Checkbox({ id, name, label, ...props }: CheckboxProps) {
       <input {...props} type='checkbox' id={checkboxId} name={name || checkboxId} />
     </CheckboxStyle>
   );
-}
+};
 
 const CheckboxStyle = styled.div`
   display: inline-flex;

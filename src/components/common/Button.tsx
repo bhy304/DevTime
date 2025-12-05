@@ -3,11 +3,12 @@ import type { Priority } from '@/types';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   priority?: Priority;
+  size?: 'large';
 }
 
-const Button = ({ priority = 'primary', children, ...props }: ButtonProps) => {
+const Button = ({ priority = 'primary', size, children, ...props }: ButtonProps) => {
   return (
-    <ButtonStyle $priority={priority} {...props}>
+    <ButtonStyle $priority={priority} $size={size} {...props}>
       {children}
     </ButtonStyle>
   );
@@ -34,7 +35,7 @@ const getDisabledStyles = ({ color }: DefaultTheme, priority: Priority) => css`
   cursor: not-allowed;
 `;
 
-const ButtonStyle = styled.button<{ $priority: Priority }>`
+const ButtonStyle = styled.button<{ $priority: Priority; $size?: 'large' }>`
   ${({ theme: { typography } }) => typography.subtitle};
   padding: 12px 16px;
   border-radius: 5px;
@@ -42,6 +43,7 @@ const ButtonStyle = styled.button<{ $priority: Priority }>`
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: ${({ theme: { fontweight } }) => fontweight.medium};
+  width: ${({ $size }) => ($size === 'large' ? '100%' : 'auto')};
 
   background-color: ${({ theme, $priority }) => getBackgroundColor(theme, $priority)};
   color: ${({ theme, $priority }) => getTextColor(theme, $priority)};
