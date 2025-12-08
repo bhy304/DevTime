@@ -1,4 +1,4 @@
-import 'styled-components';
+import { css } from 'styled-components';
 import { Color, Spacing, FontStyle, FontWeight } from './../types/index';
 
 declare module 'styled-components' {
