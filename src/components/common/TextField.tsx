@@ -15,7 +15,7 @@ const TextField = ({ id, type, label, placeholder, button, helperText }: TextFie
     <TextFieldStyle>
       <label htmlFor={id}>{label}</label>
       {button ? (
-        <div className=''>
+        <div>
           <Input id={id} type={type} placeholder={placeholder} />
           {button}
         </div>

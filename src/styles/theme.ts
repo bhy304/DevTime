@@ -70,7 +70,7 @@ const theme: DefaultTheme = {
       line-height: 16px;
     `,
     label: css`
-      font-size: 0.5rem; // 12px
+      font-size: 0.5rem; // 8px
       line-height: 12px;
     `,
   },

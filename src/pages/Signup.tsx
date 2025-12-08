@@ -133,7 +133,7 @@ const Signup = styled.main`
 
           span {
             ${({ theme: { typography } }) => typography.caption};
-            overflow: scroll;
+            overflow: auto;
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-line-clamp: 5;

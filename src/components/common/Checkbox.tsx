@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import styled from 'styled-components';
+import CheckIcon from '@/assets/check.svg?url';
 
 interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -43,7 +44,7 @@ const CheckboxStyle = styled.div`
 
     &:checked {
       background-color: rgba(76, 121, 255, 0.1);
-      background-image: url('src/assets/check.svg');
+      background-image: url(${CheckIcon});
       background-repeat: no-repeat;
       background-position: center;
       background-size: 16px 16px;
