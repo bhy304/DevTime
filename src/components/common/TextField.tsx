@@ -8,19 +8,30 @@ interface TextFieldProps {
   placeholder: string;
   helperText?: string;
   button?: React.ReactNode;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TextField = ({ id, type, label, placeholder, button, helperText }: TextFieldProps) => {
+const TextField = ({
+  id,
+  type,
+  label,
+  placeholder,
+  button,
+  helperText,
+  value,
+  onChange,
+}: TextFieldProps) => {
   return (
     <TextFieldStyle>
       <label htmlFor={id}>{label}</label>
       {button ? (
         <div>
-          <Input id={id} type={type} placeholder={placeholder} />
+          <Input id={id} type={type} placeholder={placeholder} value={value} onChange={onChange} />
           {button}
         </div>
       ) : (
-        <Input id={id} type={type} placeholder={placeholder} />
+        <Input id={id} type={type} placeholder={placeholder} value={value} onChange={onChange} />
       )}
       {helperText && <span className='helper-text'>{helperText}</span>}
     </TextFieldStyle>

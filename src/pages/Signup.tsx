@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '@/components/common/Button';
@@ -5,8 +6,45 @@ import Checkbox from '@/components/common/Checkbox';
 import TextField from '@/components/common/TextField';
 import { TERMS_TEXT } from '@/constants/legal';
 import VerticalWhiteLogo from '@/assets/vertical-white-logo.svg';
+import { useAuth } from '@/hooks/useAuth';
 
 const SignupPage = () => {
+  const { signup, checkEmail, checkNickname } = useAuth();
+
+  const [form, setForm] = useState({
+    email: '',
+    nickname: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // 회원가입
+    signup({
+      email: form.email,
+      nickname: form.nickname,
+      password: form.password,
+      confirmPassword: form.confirmPassword,
+    });
+  };
+
+  const handleCheckEmail = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // 이메일 중복 확인
+    checkEmail({ email: form.email });
+  };
+
+  const handleCheckNickname = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // 닉네임 중복 확인
+    checkNickname({ nickname: form.nickname });
+  };
+
   return (
     <Signup>
       <section className='hero-section'>
@@ -15,15 +53,17 @@ const SignupPage = () => {
       </section>
       <section className='form-section'>
         <h1 className='title'>회원가입</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextField
             id='email'
             type='email'
             label='아이디'
             placeholder='이메일 주소 형식으로 입력해 주세요.'
             helperText='이메일 형식으로 작성해 주세요.'
+            value={form.email}
+            onChange={handleChange}
             button={
-              <Button disabled priority='tertiary'>
+              <Button priority='tertiary' onClick={handleCheckEmail}>
                 중복 확인
               </Button>
             }
@@ -34,8 +74,10 @@ const SignupPage = () => {
             label='닉네임'
             placeholder='닉네임을 입력해 주세요.'
             helperText='닉네임을 입력해 주세요.'
+            value={form.nickname}
+            onChange={handleChange}
             button={
-              <Button disabled priority='tertiary'>
+              <Button priority='tertiary' onClick={handleCheckNickname}>
                 중복 확인
               </Button>
             }
@@ -46,6 +88,8 @@ const SignupPage = () => {
             label='비밀번호'
             placeholder='비밀번호를 입력해 주세요.'
             helperText='비밀번호는 8자 이상, 영문과 숫자 조합이어야 합니다.'
+            value={form.password}
+            onChange={handleChange}
           />
           <TextField
             id='passwordConfirm'
@@ -53,6 +97,8 @@ const SignupPage = () => {
             label='비밀번호 확인'
             placeholder='비밀번호를 다시 입력해 주세요.'
             helperText='비밀번호가 일치하지 않습니다.'
+            value={form.confirmPassword}
+            onChange={handleChange}
           />
 
           <fieldset className='terms'>
