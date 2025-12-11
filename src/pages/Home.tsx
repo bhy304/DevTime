@@ -1,16 +1,9 @@
-import styled from 'styled-components';
-
 const HomePage = () => {
-  return <Home>Home</Home>;
+  return (
+    <main className="flex h-screen w-screen flex-col items-center justify-center">
+      Home
+    </main>
+  );
 };
-
-const Home = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-`;
 
 export default HomePage;

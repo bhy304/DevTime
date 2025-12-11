@@ -1,69 +1,44 @@
-import { styled, css, type DefaultTheme } from 'styled-components';
-import type { Priority } from '@/types';
+import type { Priority } from "@/types";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   priority?: Priority;
-  size?: 'large';
+  size?: "large";
 }
 
-const Button = ({ priority = 'primary', size, children, ...props }: ButtonProps) => {
+const Button = ({
+  priority = "primary",
+  size,
+  children,
+  className,
+  ...props
+}: ButtonProps) => {
+  const baseStyles =
+    "text-subtitle font-medium rounded border-2 border-transparent transition-all duration-200 px-4 py-3";
+
+  const priorityStyles = {
+    primary:
+      "bg-primary-default text-white hover:brightness-90 active:brightness-85 disabled:bg-gray-400 disabled:text-gray-300",
+    secondary:
+      "bg-blue-50 text-primary-default hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400",
+    tertiary:
+      "bg-gray-50 text-primary-default hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400",
+  };
+
+  const sizeStyles = size === "large" ? "w-full" : "";
+
+  const focusStyles =
+    "focus-visible:border-secondary-fuchsia focus-visible:outline-none";
+
+  const disabledStyles = "disabled:cursor-not-allowed";
+
+  const combinedClassName =
+    `${baseStyles} ${priorityStyles[priority]} ${sizeStyles} ${focusStyles} ${disabledStyles} ${className || ""}`.trim();
+
   return (
-    <ButtonStyle $priority={priority} $size={size} {...props}>
+    <button {...props} className={combinedClassName}>
       {children}
-    </ButtonStyle>
+    </button>
   );
 };
-
-const getBackgroundColor = ({ color }: DefaultTheme, priority: Priority) => {
-  switch (priority) {
-    case 'secondary':
-      return 'rgba(76, 121, 255, 0.1)';
-    case 'tertiary':
-      return color.gray[50];
-    default:
-      return color.primary.default;
-  }
-};
-
-const getTextColor = ({ color }: DefaultTheme, priority: Priority) => {
-  return priority === 'primary' ? '#fff' : color.primary.default;
-};
-
-const getDisabledStyles = ({ color }: DefaultTheme, priority: Priority) => css`
-  background-color: ${priority === 'primary' ? color.state.disabled : color.gray[200]};
-  color: ${priority === 'primary' ? color.gray[300] : color.gray[400]};
-  cursor: not-allowed;
-`;
-
-const ButtonStyle = styled.button<{ $priority: Priority; $size?: 'large' }>`
-  ${({ theme: { typography } }) => typography.subtitle};
-  padding: 12px 16px;
-  border-radius: 5px;
-  border: 1.5px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: ${({ theme: { fontweight } }) => fontweight.medium};
-  width: ${({ $size }) => ($size === 'large' ? '100%' : 'auto')};
-
-  background-color: ${({ theme, $priority }) => getBackgroundColor(theme, $priority)};
-  color: ${({ theme, $priority }) => getTextColor(theme, $priority)};
-
-  &:hover:not(:disabled) {
-    filter: brightness(0.9);
-  }
-
-  &:active:not(:disabled) {
-    filter: brightness(0.85);
-  }
-
-  &:disabled {
-    ${({ theme, $priority }) => getDisabledStyles(theme, $priority)}
-  }
-
-  &:focus-visible {
-    border-color: ${({ theme: { color } }) => color.secondary.fuchsia};
-    outline: none;
-  }
-`;
 
 export default Button;
