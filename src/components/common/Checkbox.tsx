@@ -1,6 +1,5 @@
-import { useId } from 'react';
-import styled from 'styled-components';
-import CheckIcon from '@/assets/check.svg?url';
+import { useId, useState } from "react";
+import { ReactComponent as CheckmarkIcon } from "../../assets/checkmark.svg";
 
 interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -11,46 +10,40 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Checkbox = ({ id, name, label, ...props }: CheckboxProps) => {
   const generatedId = useId();
   const checkboxId = id || generatedId;
+  const [isChecked, setIsChecked] = useState(false);
+
   return (
-    <CheckboxStyle>
-      <label htmlFor={checkboxId}>{label}</label>
-      <input {...props} type='checkbox' id={checkboxId} name={name || checkboxId} />
-    </CheckboxStyle>
+    <div className="inline-flex items-center gap-2 select-none">
+      <input
+        {...props}
+        type="checkbox"
+        id={checkboxId}
+        name={name || checkboxId}
+        onChange={(e) => {
+          setIsChecked(e.target.checked);
+          props.onChange?.(e);
+        }}
+        className="hidden"
+      />
+      <label
+        htmlFor={checkboxId}
+        className="border-primary-default hover:border-primary-light relative flex h-4 w-4 cursor-pointer items-center justify-center rounded border-2 transition-all focus-within:shadow-[0_0_0_2px_rgba(76,121,255,0.2)] disabled:cursor-not-allowed disabled:border-gray-400 disabled:opacity-50"
+        style={{
+          backgroundColor: isChecked ? "rgba(76, 121, 255, 0.1)" : "white",
+        }}
+      >
+        {isChecked && (
+          <CheckmarkIcon className="text-primary-default h-3 w-3" />
+        )}
+      </label>
+      <label
+        htmlFor={checkboxId}
+        className="text-bodysmall cursor-pointer font-medium text-gray-700"
+      >
+        {label}
+      </label>
+    </div>
   );
 };
-
-const CheckboxStyle = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  user-select: none;
-  margin: 0;
-
-  label {
-    ${({ theme: { typography } }) => typography.bodysmall};
-    color: ${({ theme: { color } }) => color.gray[700]};
-    cursor: pointer;
-  }
-
-  input[type='checkbox'] {
-    width: 16px;
-    height: 16px;
-    border-radius: 5px;
-    border: 1px solid ${({ theme: { color } }) => color.primary.default};
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    box-sizing: border-box;
-
-    &:checked {
-      background-color: rgba(76, 121, 255, 0.1);
-      background-image: url(${CheckIcon});
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 16px 16px;
-      accent-color: ${({ theme: { color } }) => color.primary.default};
-    }
-  }
-`;
 
 export default Checkbox;
