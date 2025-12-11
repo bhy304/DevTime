@@ -1,5 +1,52 @@
 @import "tailwindcss";
 
+@theme {
+  /* Custom Colors */
+  --color-primary-default: #4c79ff;
+  --color-primary-light: #78b0ff;
+
+  --color-secondary-indigo: #023e99;
+  --color-secondary-informative: #2563eb;
+  --color-secondary-negative: #dc2626;
+  --color-secondary-notice: #fbbf24;
+  --color-secondary-positive: #22c55e;
+  --color-secondary-fuchsia: #fd28ec;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f0f2f5;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #ccd0d6;
+  --color-gray-400: #969da8;
+  --color-gray-500: #717887;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #394252;
+  --color-gray-800: #1f2937;
+
+  --color-state-disabled: #969da8;
+
+  /* Custom Font Sizes */
+  --font-size-heading: 1.5rem;
+  --font-size-heading--line-height: 30px;
+
+  --font-size-title: 1.25rem;
+  --font-size-title--line-height: 24px;
+
+  --font-size-subtitle: 1.125rem;
+  --font-size-subtitle--line-height: 22px;
+
+  --font-size-body: 1rem;
+  --font-size-body--line-height: 20px;
+
+  --font-size-bodysmall: 0.875rem;
+  --font-size-bodysmall--line-height: 18px;
+
+  --font-size-caption: 0.75rem;
+  --font-size-caption--line-height: 16px;
+
+  --font-size-label: 0.5rem;
+  --font-size-label--line-height: 12px;
+}
+
 @layer base {
   * {
     @apply m-0 box-border p-0;
