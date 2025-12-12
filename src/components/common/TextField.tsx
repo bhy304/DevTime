@@ -1,26 +1,19 @@
 import Input from "./Input";
 import type { FieldError } from "react-hook-form";
 
-interface TextFieldProps {
-  id: string;
-  type: string;
+interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  placeholder: string;
   button?: React.ReactNode;
   helperText?: string;
   errors?: FieldError;
-  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 const TextField = ({
   id,
-  type,
   label,
-  placeholder,
   button,
   helperText,
   errors,
-  onBlur,
   ...props
 }: TextFieldProps) => {
   return (
@@ -30,18 +23,11 @@ const TextField = ({
       </label>
       {button ? (
         <div className="flex gap-3">
-          <Input
-            id={id}
-            type={type}
-            placeholder={placeholder}
-            error={!!errors}
-            onBlur={onBlur}
-            {...props}
-          />
+          <Input id={id} error={!!errors} {...props} />
           {button}
         </div>
       ) : (
-        <Input id={id} type={type} placeholder={placeholder} {...props} />
+        <Input id={id} error={!!errors} {...props} />
       )}
       {errors && (
         <span className="text-caption text-secondary-negative">
