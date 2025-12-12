@@ -18,7 +18,7 @@ const Checkbox = ({ id, name, label, errors, ...props }: CheckboxProps) => {
     <div className="inline-flex items-center gap-2 select-none">
       <label
         htmlFor={checkboxId}
-        className={`text-bodysmall cursor-pointer font-medium text-gray-700 ${errors && "text-primary-default/30"}`}
+        className={`text-bodysmall text-primary-default/30 peer-checked:text-primary-default cursor-pointer font-medium`}
       >
         {label}
       </label>

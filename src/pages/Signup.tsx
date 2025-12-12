@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import z from "zod";
 import Button from "@/components/common/Button";
@@ -28,10 +28,7 @@ const SignupPage = (): React.JSX.Element => {
           /^(?=.*[A-Za-z])(?=.*\d).+$/,
           "비밀번호는 8자 이상, 영문과 숫자 조합이어야 합니다.",
         ),
-      confirmPassword: z
-        .string()
-        .regex(/^\S+$/, "비밀번호가 일치하지 않습니다.")
-        .min(1, "비밀번호가 일치하지 않습니다."),
+      confirmPassword: z.string().min(1, "비밀번호가 일치하지 않습니다."),
       terms: z.literal(true, { message: "이용약관에 동의해 주세요." }),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -46,12 +43,12 @@ const SignupPage = (): React.JSX.Element => {
     getValues,
     watch,
     setError,
+    clearErrors,
   } = useForm<Auth>({
     resolver: zodResolver(signupSchema),
     mode: "all",
   });
 
-  // 컴포넌트 렌더링 시에만 호출되어야 하며, 이벤트 핸들러 내에서 사용하면 제대로 작동하지 않습니다.
   const email = watch("email");
   const nickname = watch("nickname");
 
@@ -62,40 +59,101 @@ const SignupPage = (): React.JSX.Element => {
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const [emailCheckMessage, setEmailCheckMessage] = useState<string>("");
   const [nicknameCheckMessage, setNicknameCheckMessage] = useState<string>("");
+  const [isChecking, setIsChecking] = useState(false); // 로딩 상태 추가
 
-  const handleCheckEmail = async () => {
-    const { email } = getValues();
-    const result = await checkEmail({ email });
-    if (result?.available) {
-      setEmailCheckMessage(result.message);
-    } else {
-      setError("email", { type: "manual", message: result?.message });
+  // 문제 : "중복 확인 완료 후 → 사용자가 이메일을 수정함 → 여전히 중복 확인 완료된 상태로 인식됨"
+  // 해결 : email이나 nickname 값이 바뀔 때마다 안전하지 않음 상태로 되돌리는 로직 필요
+  // 이메일 값이 변하면 중복 확인 상태 초기화
+  useEffect(() => {
+    setIsEmailChecked(false);
+    setEmailCheckMessage("");
+    clearErrors("email");
+  }, [email, clearErrors]);
+
+  // 닉네임 값이 변하면 중복 확인 상태 초기화
+  useEffect(() => {
+    setIsNicknameChecked(false);
+    setNicknameCheckMessage("");
+    clearErrors("nickname");
+  }, [nickname, clearErrors]);
+
+  const handleEmailBlur = () => {
+    if (email && !errors.email && !isEmailChecked) {
+      setError("email", {
+        type: "manual",
+        message: "중복을 확인해 주세요.",
+      });
     }
-    setIsEmailChecked(true);
   };
 
-  const handleCheckNickname = async () => {
-    const { nickname } = getValues();
-    const result = await checkNickname({ nickname });
-
-    if (result?.available) {
-      setNicknameCheckMessage(result.message);
-    } else {
-      setError("nickname", { type: "manual", message: result?.message });
+  const handleNicknameBlur = () => {
+    if (nickname && !errors.nickname && !isNicknameChecked) {
+      setError("nickname", {
+        type: "manual",
+        message: "중복을 확인해 주세요.",
+      });
     }
-    setIsNicknameChecked(true);
+  };
+
+  const handleCheckEmail = async (): Promise<void> => {
+    if (isChecking) return;
+    setIsChecking(true);
+
+    try {
+      const { email } = getValues();
+      const result = await checkEmail({ email });
+      if (result?.available) {
+        setEmailCheckMessage(result.message);
+        setIsEmailChecked(true);
+        clearErrors("email"); // ✅ 성공 시 에러(빨간 메시지) 삭제
+      } else {
+        setError("email", { type: "manual", message: result?.message });
+      }
+    } catch (error) {
+      console.error("이메일 중복 확인 중 오류 발생:", error);
+      setError("email", {
+        type: "manual",
+        message: "이메일 중복 확인 중 오류가 발생했습니다. 다시 시도해 주세요.",
+      });
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  const handleCheckNickname = async (): Promise<void> => {
+    if (isChecking) return;
+    setIsChecking(true);
+
+    try {
+      const { nickname } = getValues();
+      const result = await checkNickname({ nickname });
+      if (result?.available) {
+        setNicknameCheckMessage(result.message);
+        setIsNicknameChecked(true);
+        clearErrors("nickname");
+      } else {
+        setError("nickname", { type: "manual", message: result?.message });
+      }
+    } catch (error) {
+      console.error("닉네임 중복 확인 중 오류 발생:", error);
+      setError("nickname", {
+        type: "manual",
+        message: "닉네임 중복 확인 중 오류가 발생했습니다. 다시 시도해 주세요.",
+      });
+    } finally {
+      setIsChecking(false);
+    }
   };
 
   const onSubmit = async (data: Auth) => {
-    console.log(errors);
-
     const result = await signup(data);
+    console.log(result);
 
     if (result?.success) {
       navigate("/login", { replace: true });
+    } else {
+      alert(result?.message || "회원가입에 실패했습니다. 다시 시도해 주세요.");
     }
-
-    console.log(result);
   };
 
   return (
@@ -104,8 +162,7 @@ const SignupPage = (): React.JSX.Element => {
         <img
           src={VerticalWhiteLogo}
           alt="DevTime Logo"
-          className="mb-9 h-56 w-66"
-          style={{ width: "264px", height: "200px" }}
+          className="mb-9 h-[200px] w-[264px]"
         />
         <p className="text-title font-semibold text-white">
           개발자를 위한 타이머
@@ -125,11 +182,15 @@ const SignupPage = (): React.JSX.Element => {
               errors={errors.email}
               helperText={emailCheckMessage}
               {...register("email")}
+              onBlur={handleEmailBlur}
               button={
                 <Button
                   type="button"
                   priority="tertiary"
-                  disabled={!email?.trim() || !!errors.email}
+                  disabled={
+                    !email?.trim() ||
+                    (!!errors.email && errors.email.type !== "manual")
+                  }
                   onClick={handleCheckEmail}
                 >
                   중복 확인
@@ -144,11 +205,15 @@ const SignupPage = (): React.JSX.Element => {
               errors={errors.nickname}
               helperText={nicknameCheckMessage}
               {...register("nickname")}
+              onBlur={handleNicknameBlur}
               button={
                 <Button
                   type="button"
                   priority="tertiary"
-                  disabled={!nickname?.trim() || !!errors.nickname}
+                  disabled={
+                    !nickname?.trim() ||
+                    (!!errors.nickname && errors.nickname.type !== "manual")
+                  }
                   onClick={handleCheckNickname}
                 >
                   중복 확인
@@ -185,7 +250,7 @@ const SignupPage = (): React.JSX.Element => {
               </div>
 
               <div className="rounded bg-gray-50 px-4 py-3">
-                <span className="text-caption no-scrollbar wrap-break-words line-clamp-5 overflow-auto leading-relaxed whitespace-pre-wrap">
+                <span className="text-caption no-scrollbar scrollbar-hide wrap-break-words line-clamp-5 overflow-auto leading-relaxed whitespace-pre-wrap [&::-webkit-scrollbar]:hidden">
                   {TERMS_TEXT}
                 </span>
               </div>

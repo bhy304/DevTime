@@ -1,15 +1,15 @@
-import styled from 'styled-components';
-import Input from './Input';
+import Input from "./Input";
+import type { FieldError } from "react-hook-form";
 
 interface TextFieldProps {
   id: string;
   type: string;
   label: string;
   placeholder: string;
-  helperText?: string;
   button?: React.ReactNode;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  helperText?: string;
+  errors?: FieldError;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 const TextField = ({
@@ -19,56 +19,42 @@ const TextField = ({
   placeholder,
   button,
   helperText,
-  value,
-  onChange,
+  errors,
+  onBlur,
+  ...props
 }: TextFieldProps) => {
   return (
-    <TextFieldStyle>
-      <label htmlFor={id}>{label}</label>
+    <fieldset className="mb-6 flex flex-col gap-2 border-0 p-0">
+      <label htmlFor={id} className="text-bodysmall font-medium text-gray-600">
+        {label}
+      </label>
       {button ? (
-        <div>
-          <Input id={id} type={type} placeholder={placeholder} value={value} onChange={onChange} />
+        <div className="flex gap-3">
+          <Input
+            id={id}
+            type={type}
+            placeholder={placeholder}
+            error={!!errors}
+            onBlur={onBlur}
+            {...props}
+          />
           {button}
         </div>
       ) : (
-        <Input id={id} type={type} placeholder={placeholder} value={value} onChange={onChange} />
+        <Input id={id} type={type} placeholder={placeholder} {...props} />
       )}
-      {helperText && <span className='helper-text'>{helperText}</span>}
-    </TextFieldStyle>
+      {errors && (
+        <span className="text-caption text-secondary-negative">
+          {errors.message}
+        </span>
+      )}
+      {helperText && (
+        <span className="text-caption text-secondary-positive">
+          {helperText}
+        </span>
+      )}
+    </fieldset>
   );
 };
-
-const TextFieldStyle = styled.fieldset`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 24px;
-
-  label {
-    ${({ theme: { typography } }) => typography.bodysmall};
-    font-weight: ${({ theme: { fontweight } }) => fontweight.medium};
-    color: ${({ theme: { color } }) => color.gray[600]};
-  }
-
-  label + div {
-    display: flex;
-    gap: 12px;
-  }
-
-  input {
-    flex: 1;
-    min-width: 0;
-  }
-
-  button {
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-
-  .helper-text {
-    ${({ theme: { typography } }) => typography.caption};
-    color: ${({ theme: { color } }) => color.gray[400]};
-  }
-`;
 
 export default TextField;
