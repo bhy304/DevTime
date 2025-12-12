@@ -25,26 +25,20 @@
   --color-state-disabled: #969da8;
 
   /* Custom Font Sizes */
-  --font-size-heading: 1.5rem;
-  --font-size-heading--line-height: 30px;
-
-  --font-size-title: 1.25rem;
-  --font-size-title--line-height: 24px;
-
-  --font-size-subtitle: 1.125rem;
-  --font-size-subtitle--line-height: 22px;
-
-  --font-size-body: 1rem;
-  --font-size-body--line-height: 20px;
-
-  --font-size-bodysmall: 0.875rem;
-  --font-size-bodysmall--line-height: 18px;
-
-  --font-size-caption: 0.75rem;
-  --font-size-caption--line-height: 16px;
-
-  --font-size-label: 0.5rem;
-  --font-size-label--line-height: 12px;
+  --text-heading: 1.5rem;
+  --text-heading--line-height: calc(1.5rem * 1.25); /* 30px */
+  --text-title: 1.25rem;
+  --text-title--line-height: calc(1.25rem * 1.2); /* 24px */
+  --text-subtitle: 1.125rem;
+  --text-subtitle--line-height: calc(1.125rem * 1.2222222222); /* 22px */
+  --text-body: 1rem;
+  --text-body--line-height: calc(1rem * 1.25); /* 20px */
+  --text-bodysmall: 0.875rem;
+  --text-bodysmall--line-height: calc(0.875rem * 1.285714286); /* 18px */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: calc(0.75rem * 1.333333333); /* 16px */
+  --text-label: 0.625rem;
+  --text-label--line-height: calc(0.625rem * 1.2); /* 12px */
 }
 
 @layer base {

@@ -1,4 +1,4 @@
-import axios, { type AxiosRequestConfig, type AxiosInstance } from 'axios';
+import axios, { type AxiosRequestConfig, type AxiosInstance } from "axios";
 
 class HttpClient {
   private axiosInstance: AxiosInstance;
@@ -7,7 +7,7 @@ class HttpClient {
     this.axiosInstance = axios.create({
       baseURL: import.meta.env.VITE_API_URL,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       ...config,
     });
@@ -18,7 +18,7 @@ class HttpClient {
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
 
     this.axiosInstance.interceptors.response.use(
@@ -27,7 +27,7 @@ class HttpClient {
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
   }
 
@@ -36,13 +36,21 @@ class HttpClient {
     return response.data;
   }
 
-  async post<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.post<T>(url, data, config);
+  async post<T, R>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig,
+  ): Promise<R> {
+    const response = await this.axiosInstance.post<R>(url, data, config);
     return response.data;
   }
 
-  async put<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.put<T>(url, data, config);
+  async put<T, R>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig,
+  ): Promise<R> {
+    const response = await this.axiosInstance.put<R>(url, data, config);
     return response.data;
   }
 
