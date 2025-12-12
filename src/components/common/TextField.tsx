@@ -6,9 +6,10 @@ interface TextFieldProps {
   type: string;
   label: string;
   placeholder: string;
-  helperText?: string;
   button?: React.ReactNode;
+  helperText?: string;
   errors?: FieldError;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 const TextField = ({
@@ -17,7 +18,9 @@ const TextField = ({
   label,
   placeholder,
   button,
+  helperText,
   errors,
+  onBlur,
   ...props
 }: TextFieldProps) => {
   return (
@@ -27,7 +30,14 @@ const TextField = ({
       </label>
       {button ? (
         <div className="flex gap-3">
-          <Input id={id} type={type} placeholder={placeholder} {...props} />
+          <Input
+            id={id}
+            type={type}
+            placeholder={placeholder}
+            error={!!errors}
+            onBlur={onBlur}
+            {...props}
+          />
           {button}
         </div>
       ) : (
@@ -36,6 +46,11 @@ const TextField = ({
       {errors && (
         <span className="text-caption text-secondary-negative">
           {errors.message}
+        </span>
+      )}
+      {helperText && (
+        <span className="text-caption text-secondary-positive">
+          {helperText}
         </span>
       )}
     </fieldset>
