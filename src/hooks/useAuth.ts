@@ -34,5 +34,13 @@ export const useAuth = () => {
     }
   };
 
-  return { signup, checkEmail, checkNickname };
+  const login = async (data: Pick<Auth, "email" | "password">) => {
+    try {
+      return await authApi.login(data);
+    } catch (error) {
+      return handleAxiosError(error);
+    }
+  };
+
+  return { signup, checkEmail, checkNickname, login };
 };
