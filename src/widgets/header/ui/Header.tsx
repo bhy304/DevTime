@@ -10,7 +10,7 @@ const Header = () => {
           <li>
             <Link
               to="/dashboard"
-              className="text-body text-secondary-indigo font-semibold hover:underline"
+              className="text-body text-indigo font-semibold hover:underline"
             >
               대시보드
             </Link>
@@ -18,7 +18,7 @@ const Header = () => {
           <li>
             <Link
               to="/ranking"
-              className="text-body text-secondary-indigo font-semibold hover:underline"
+              className="text-body text-indigo font-semibold hover:underline"
             >
               랭킹
             </Link>
@@ -30,7 +30,7 @@ const Header = () => {
           <li>
             <Link
               to="/login"
-              className="text-body text-secondary-indigo font-semibold hover:underline"
+              className="text-body text-indigo font-semibold hover:underline"
             >
               로그인
             </Link>
@@ -38,7 +38,7 @@ const Header = () => {
           <li>
             <Link
               to="/signup"
-              className="text-body text-secondary-indigo font-semibold hover:underline"
+              className="text-body text-indigo font-semibold hover:underline"
             >
               회원가입
             </Link>

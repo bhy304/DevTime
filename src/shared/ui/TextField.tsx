@@ -1,5 +1,5 @@
-import Input from "./Input";
-import type { FieldError } from "react-hook-form";
+import Input from './Input';
+import type { FieldError } from 'react-hook-form';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -8,14 +8,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldError;
 }
 
-const TextField = ({
-  id,
-  label,
-  button,
-  helperText,
-  errors,
-  ...props
-}: TextFieldProps) => {
+const TextField = ({ id, label, button, helperText, errors, ...props }: TextFieldProps) => {
   return (
     <fieldset className="mb-6 flex flex-col gap-2 border-0 p-0">
       <label htmlFor={id} className="text-bodysmall font-medium text-gray-600">
@@ -29,16 +22,8 @@ const TextField = ({
       ) : (
         <Input id={id} error={!!errors} {...props} />
       )}
-      {errors && (
-        <span className="text-caption text-secondary-negative">
-          {errors.message}
-        </span>
-      )}
-      {helperText && (
-        <span className="text-caption text-secondary-positive">
-          {helperText}
-        </span>
-      )}
+      {errors && <span className="text-caption text-negative">{errors.message}</span>}
+      {helperText && <span className="text-caption text-positive">{helperText}</span>}
     </fieldset>
   );
 };

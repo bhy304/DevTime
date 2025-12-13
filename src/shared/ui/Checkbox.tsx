@@ -34,8 +34,8 @@ const Checkbox = ({ id, name, label, errors, ...props }: CheckboxProps) => {
             'peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
             '[&_svg]:opacity-0 [&_svg]:transition-opacity peer-checked:[&_svg]:opacity-100',
             errors
-              ? 'border-secondary-negative peer-hover:border-secondary-negative'
-              : 'border-primary-default peer-hover:border-primary-light peer-checked:border-primary-default peer-checked:bg-blue-50',
+              ? 'border-negative peer-hover:border-negative'
+              : 'border-primary peer-hover:border-primary-light peer-checked:border-primary peer-checked:bg-blue-50',
           )}
         >
           <CheckmarkIcon className="h-3 w-3" />
