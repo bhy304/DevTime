@@ -7,11 +7,11 @@ const buttonVariants = cva(
     variants: {
       priority: {
         primary:
-          'bg-primary-default text-white hover:brightness-90 active:brightness-85 disabled:bg-gray-400 disabled:text-gray-300',
+          'bg-primary text-white hover:brightness-90 active:brightness-85 disabled:bg-gray-400 disabled:text-gray-300',
         secondary:
-          'bg-blue-50 text-primary-default hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400',
+          'bg-blue-50 text-primary hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400',
         tertiary:
-          'bg-gray-50 text-primary-default hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400',
+          'bg-gray-50 text-primary hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400',
       },
       size: {
         large: 'w-full',

@@ -111,8 +111,8 @@ const Login = () => {
             <Button size="large" type="submit" priority="primary" disabled={!isValid}>
               로그인
             </Button>
-            <div className="text-body text-primary-default mt-6 flex justify-center gap-3 font-normal">
-              <Link to="/signup" className="text-primary-default text-bodysmall">
+            <div className="text-body text-primary mt-6 flex justify-center gap-3 font-normal">
+              <Link to="/signup" className="text-primary text-bodysmall">
                 회원가입
               </Link>
             </div>

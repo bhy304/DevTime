@@ -149,13 +149,13 @@ const Signup = () => {
 
   return (
     <main className="grid h-screen w-full grid-cols-2">
-      <section className="bg-primary-default flex flex-col items-center justify-center">
+      <section className="bg-primary flex flex-col items-center justify-center">
         <img src={VerticalWhiteLogo} alt="DevTime Logo" className="mb-9 h-[200px] w-[264px]" />
         <p className="text-title font-semibold text-white">개발자를 위한 타이머</p>
       </section>
       <section className="flex flex-col items-center justify-center px-6">
         <div className="mx-auto w-full max-w-sm">
-          <h1 className="text-heading text-primary-default mb-9 text-center font-bold">회원가입</h1>
+          <h1 className="text-heading text-primary mb-9 text-center font-bold">회원가입</h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <TextField
               id="email"
@@ -236,9 +236,9 @@ const Signup = () => {
             </Button>
           </form>
 
-          <div className="text-body text-primary-default mt-6 flex justify-center gap-3 font-normal">
+          <div className="text-body text-primary mt-6 flex justify-center gap-3 font-normal">
             <span>회원이신가요?</span>
-            <Link to="/login" className="text-primary-default font-bold">
+            <Link to="/login" className="text-primary font-bold">
               로그인 바로가기
             </Link>
           </div>
