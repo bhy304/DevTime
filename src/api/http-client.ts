@@ -30,7 +30,7 @@ class HttpClient {
         return response;
       },
       async (error) => {
-        if (error.response.status === 401 && !error.config._retry) {
+        if (error.response && error.response.status === 401 && !error.config._retry) {
           error.config._retry = true;
 
           try {
