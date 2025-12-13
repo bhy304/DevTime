@@ -1,7 +1,7 @@
 import { useDialogContext } from './DialogContext';
 
 const Content = ({ children }: { children: React.ReactNode }) => {
-  const { isOpen, close } = useDialogContext();
+  const { isOpen } = useDialogContext();
 
   if (!isOpen) return null;
 
