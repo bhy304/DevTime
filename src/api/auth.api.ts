@@ -1,18 +1,10 @@
 import HttpClient from "./http-client";
 import type { Auth } from "@/models/auth.model";
-
-interface Response {
-  success: boolean;
-  message?: string;
-  error?: {
-    message: string;
-    statusCode: number;
-  };
-}
-
-interface CheckDuplicateResponse extends Response {
-  available: boolean;
-}
+import type {
+  CheckDuplicateResponse,
+  LoginResponse,
+  RefreshTokenResponse,
+} from "@/types/auth.type";
 
 class AuthAPI extends HttpClient {
   signup = async (data: Auth): Promise<Response> => {
@@ -29,6 +21,22 @@ class AuthAPI extends HttpClient {
     nickname: Pick<Auth, "nickname">,
   ): Promise<CheckDuplicateResponse> => {
     return await this.get("/signup/check-nickname", { params: nickname });
+  };
+
+  login = async (
+    data: Pick<Auth, "email" | "password">,
+  ): Promise<LoginResponse> => {
+    return await this.post("/auth/login", data);
+  };
+
+  logout = async (): Promise<Response> => {
+    return await this.post("/auth/logout");
+  };
+
+  refreshToken = async (
+    refreshToken: string,
+  ): Promise<RefreshTokenResponse> => {
+    return this.post("/auth/refresh", { body: { refreshToken } });
   };
 }
 
