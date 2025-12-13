@@ -12,7 +12,8 @@ export interface LoginResponse extends BaseResponse {
 }
 
 export interface RefreshTokenResponse {
-  refreshToken: string;
+  success: boolean;
+  accessToken: string;
 }
 
 export interface CheckDuplicateResponse extends BaseResponse {

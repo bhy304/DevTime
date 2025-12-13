@@ -24,7 +24,7 @@ class AuthAPI extends HttpClient {
   };
 
   refreshToken = async (refreshToken: string): Promise<RefreshTokenResponse> => {
-    return this.post('/auth/refresh', { body: { refreshToken } });
+    return this.post('/auth/refresh', { refreshToken });
   };
 }
 
