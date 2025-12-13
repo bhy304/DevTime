@@ -1,4 +1,4 @@
-import Button from '@/components/common/Button';
+import Button from '@/shared/ui/Button';
 import { useDialogContext } from './DialogContext';
 
 const Trigger = ({ children }: { children: React.ReactNode }) => {

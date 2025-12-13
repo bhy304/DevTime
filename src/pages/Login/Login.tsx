@@ -1,15 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
-import SymbolLogo from '@/assets/symbol-logo.svg?react';
-import VerticalLogo from '@/assets/vertical-logo.svg?react';
-import Button from '@/components/common/Button';
-import TextField from '@/components/common/TextField';
+import SymbolLogo from '@/shared/assets/symbol-logo.svg?react';
+import VerticalLogo from '@/shared/assets/vertical-logo.svg?react';
+import Button from '@/shared/ui/Button';
+import TextField from '@/shared/ui/TextField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { loginSchema, type LoginSchema } from '@/schemas/auth.schema';
-import { useAuth } from '@/hooks/useAuth';
-import Dialog from '@/components/Dialog/Dialog';
+import { loginSchema, type LoginSchema } from '@/entities/auth/model/auth.schema';
+import { useAuth } from '@/entities/auth/model/useAuth';
+import Dialog from '@/shared/ui/Dialog/Dialog';
 import { useState } from 'react';
-import { setTokens } from '@/utils/auth';
+import { setTokens } from '@/shared/lib/auth';
 
 type DialogState = {
   isOpen: boolean;
