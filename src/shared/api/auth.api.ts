@@ -1,6 +1,6 @@
 import HttpClient from './http-client';
-import type { Auth } from '@/models/auth.model';
-import type { CheckDuplicateResponse, LoginResponse, RefreshTokenResponse } from '@/types/auth.type';
+import type { Auth } from '@/entities/auth/model/auth.model';
+import type { CheckDuplicateResponse, LoginResponse, RefreshTokenResponse } from '@/shared/types/auth.type';
 
 class AuthAPI extends HttpClient {
   signup = async (data: Auth): Promise<Response> => {
