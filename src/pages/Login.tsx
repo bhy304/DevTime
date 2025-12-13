@@ -4,7 +4,7 @@ import VerticalLogo from '@/assets/vertical-logo.svg?react';
 import Button from '@/components/common/Button';
 import TextField from '@/components/common/TextField';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, type FieldErrors } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { loginSchema, type LoginSchema } from '@/schemas/auth.schema';
 import { useAuth } from '@/hooks/useAuth';
 import Dialog from '@/components/Dialog/Dialog';
@@ -43,47 +43,45 @@ const Login = () => {
     onClose?.();
   };
 
-  const onSubmit = handleSubmit(
-    async (data: LoginSchema) => {
-      const { success, accessToken, refreshToken, isDuplicateLogin, isFirstLogin } = await login(data);
+  const onSubmit = handleSubmit(async (data: LoginSchema) => {
+    const { success, accessToken, refreshToken, isDuplicateLogin, isFirstLogin } = await login(data);
 
-      if (success) {
-        setTokens(accessToken, refreshToken);
+    if (success) {
+      setTokens(accessToken, refreshToken);
 
-        if (isDuplicateLogin) {
-          setDialogState({
-            isOpen: true,
-            title: '중복 로그인이 불가능합니다.',
-            content:
-              '다른 기기에 중복 로그인 된 상태입니다. [확인] 버튼을 누르면 다른 기기에서 강제 로그아웃되며, 진행중이던 타이머가 있다면 기록이 자동 삭제됩니다.',
-            onClose: () => {
-              if (isFirstLogin) {
-                navigate('/profile', { replace: true });
-              } else {
-                navigate('/', { replace: true });
-              }
-            },
-          });
-          return;
-        }
-
-        if (isFirstLogin) {
-          navigate('/profile', { replace: true });
-        } else {
-          navigate('/', { replace: true });
-        }
-      } else {
+      if (isDuplicateLogin) {
         setDialogState({
           isOpen: true,
-          title: '로그인 정보를 다시 확인해 주세요.',
-          content: '',
+          title: '중복 로그인이 불가능합니다.',
+          content:
+            '다른 기기에 중복 로그인 된 상태입니다. [확인] 버튼을 누르면 다른 기기에서 강제 로그아웃되며, 진행중이던 타이머가 있다면 기록이 자동 삭제됩니다.',
           onClose: () => {
-            setFocus('email');
+            if (isFirstLogin) {
+              navigate('/profile', { replace: true });
+            } else {
+              navigate('/', { replace: true });
+            }
           },
         });
+        return;
       }
+
+      if (isFirstLogin) {
+        navigate('/profile', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    } else {
+      setDialogState({
+        isOpen: true,
+        title: '로그인 정보를 다시 확인해 주세요.',
+        content: '',
+        onClose: () => {
+          setFocus('email');
+        },
+      });
     }
-  );
+  });
 
   return (
     <main className="relative flex h-screen w-full items-center justify-center overflow-hidden">
