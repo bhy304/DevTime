@@ -15,7 +15,12 @@ const buttonVariants = cva(
       },
       size: {
         large: 'w-full',
+        small: 'w-fit',
       },
+    },
+    defaultVariants: {
+      priority: 'primary',
+      size: 'small',
     },
   },
 );

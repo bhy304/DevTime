@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import SymbolLogo from '@/shared/assets/symbol-logo.svg?react';
 import VerticalLogo from '@/shared/assets/vertical-logo.svg?react';
-import Button from '@/shared/ui/Button';
-import TextField from '@/shared/ui/TextField';
+import Button from '@/shared/ui/Button/Button';
+import TextField from '@/shared/ui/TextField/TextField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { loginSchema, type LoginSchema } from '@/entities/auth/model/auth.schema';
@@ -92,23 +92,31 @@ const Login = () => {
         <div className="mx-[86px]">
           <form onSubmit={onSubmit} className="">
             <VerticalLogo width={132} height={100} className="mx-auto mt-[72px] mb-12" aria-label="DevTime Logo" />
+
             <TextField
               id="email"
-              type="email"
-              label="아이디"
               placeholder="이메일 주소를 입력해 주세요."
-              errors={errors.email}
-              {...register('email')}
-            />
+              error={errors.email ? 'validation' : undefined}
+            >
+              <TextField.Fieldset>
+                <TextField.Label>아이디</TextField.Label>
+                <TextField.Input type="email" {...register('email')} />
+                <TextField.HelperText>{errors.email?.message}</TextField.HelperText>
+              </TextField.Fieldset>
+            </TextField>
             <TextField
               id="password"
-              type="password"
-              label="비밀번호"
               placeholder="비밀번호를 입력해 주세요."
-              errors={errors.password}
-              {...register('password')}
-            />
-            <Button size="large" type="submit" priority="primary" disabled={!isValid}>
+              error={errors.password ? 'validation' : undefined}
+            >
+              <TextField.Fieldset>
+                <TextField.Label>비밀번호</TextField.Label>
+                <TextField.Input type="password" {...register('password')} />
+                <TextField.HelperText>{errors.password?.message}</TextField.HelperText>
+              </TextField.Fieldset>
+            </TextField>
+
+            <Button size="large" type="submit" disabled={!isValid}>
               로그인
             </Button>
             <div className="text-body text-primary mt-6 flex justify-center gap-3 font-normal">
@@ -124,7 +132,7 @@ const Login = () => {
           <Dialog.Title>{dialogState.title}</Dialog.Title>
           <Dialog.Description>{dialogState.content}</Dialog.Description>
           <Dialog.Footer>
-            <Button priority="primary" size="large" onClick={closeDialog}>
+            <Button size="large" onClick={closeDialog}>
               확인
             </Button>
           </Dialog.Footer>
