@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { type Auth } from '@/entities/auth/model/auth.model';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema, type SignupSchema } from '@/entities/auth/model/auth.schema';
+import type { CheckDuplicateResponse } from '@/shared/types/auth.type';
 
 const Signup = () => {
   const {
@@ -70,7 +71,7 @@ const Signup = () => {
 
     try {
       const { email } = getValues();
-      const result = await checkEmail({ email });
+      const result = (await checkEmail({ email })) as CheckDuplicateResponse;
       if (result?.available) {
         setEmailCheckMessage(result.message);
         setIsEmailChecked(true);
@@ -94,7 +95,7 @@ const Signup = () => {
 
     try {
       const { nickname } = getValues();
-      const result = await checkNickname({ nickname });
+      const result = (await checkNickname({ nickname })) as CheckDuplicateResponse;
       if (result?.available) {
         setNicknameCheckMessage(result.message);
         setIsNicknameChecked(true);

@@ -10,6 +10,7 @@ import { useAuth } from '@/entities/auth/model/useAuth';
 import Dialog from '@/shared/ui/Dialog/Dialog';
 import { useState } from 'react';
 import { setTokens } from '@/shared/lib/auth';
+import type { LoginResponse } from '@/shared/types/auth.type';
 
 type DialogState = {
   isOpen: boolean;
@@ -44,19 +45,20 @@ const Login = () => {
   };
 
   const onSubmit = handleSubmit(async (data: LoginSchema) => {
-    const response = await login(data);
+    const response = (await login(data)) as LoginResponse;
 
     if (response && response.success) {
-      setTokens(response.accessToken, response.refreshToken);
+      const { accessToken, refreshToken, isFirstLogin, isDuplicateLogin } = response;
+      setTokens(accessToken, refreshToken);
 
-      if (response.isDuplicateLogin) {
+      if (isDuplicateLogin) {
         setDialogState({
           isOpen: true,
           title: '중복 로그인이 불가능합니다.',
           content:
             '다른 기기에 중복 로그인 된 상태입니다. [확인] 버튼을 누르면 다른 기기에서 강제 로그아웃되며, 진행중이던 타이머가 있다면 기록이 자동 삭제됩니다.',
           onClose: () => {
-            if (response.isFirstLogin) {
+            if (isFirstLogin) {
               navigate('/profile', { replace: true });
             } else {
               navigate('/', { replace: true });
@@ -66,7 +68,7 @@ const Login = () => {
         return;
       }
 
-      if (response.isFirstLogin) {
+      if (isFirstLogin) {
         navigate('/profile', { replace: true });
       } else {
         navigate('/', { replace: true });
