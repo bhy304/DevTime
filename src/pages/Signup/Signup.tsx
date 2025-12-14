@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '@/shared/ui/Button/Button';
-import Checkbox from '@/shared/ui/Checkbox';
+import Checkbox from '@/shared/ui/Checkbox/Checkbox';
 import TextField from '@/shared/ui/TextField/TextField';
 import { TERMS_TEXT } from '@/shared/config/legal';
 import VerticalWhiteLogo from '@/shared/assets/vertical-white-logo.svg';
