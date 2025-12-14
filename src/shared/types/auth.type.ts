@@ -1,4 +1,3 @@
-// signup, logout
 export interface BaseResponse {
   success: boolean;
   message: string;
