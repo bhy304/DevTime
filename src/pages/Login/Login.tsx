@@ -106,7 +106,7 @@ const Login = () => {
             </TextField>
             <TextField
               id="password"
-              placeholder="이메일 주소를 입력해 주세요."
+              placeholder="비밀번호를 입력해 주세요."
               error={errors.password ? 'validation' : undefined}
             >
               <TextField.Fieldset>

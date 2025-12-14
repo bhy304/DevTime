@@ -120,8 +120,6 @@ const Signup = () => {
     }
   });
 
-  console.log((!!errors.email && !!email?.trim()) || isEmailChecked);
-
   return (
     <main className="grid h-screen w-full grid-cols-2">
       <section className="bg-primary flex flex-col items-center justify-center">
