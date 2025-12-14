@@ -1,9 +1,14 @@
 import HttpClient from './http-client';
 import type { Auth } from '@/entities/auth/model/auth.model';
-import type { CheckDuplicateResponse, LoginResponse, RefreshTokenResponse } from '@/shared/types/auth.type';
+import type {
+  BaseResponse,
+  CheckDuplicateResponse,
+  LoginResponse,
+  RefreshTokenResponse,
+} from '@/shared/types/auth.type';
 
 class AuthAPI extends HttpClient {
-  signup = async (data: Auth): Promise<Response> => {
+  signup = async (data: Auth): Promise<BaseResponse> => {
     return await this.post('/signup', data);
   };
 
@@ -19,7 +24,7 @@ class AuthAPI extends HttpClient {
     return await this.post('/auth/login', data);
   };
 
-  logout = async (): Promise<Response> => {
+  logout = async (): Promise<BaseResponse> => {
     return await this.post('/auth/logout');
   };
 
