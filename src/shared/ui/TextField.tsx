@@ -1,4 +1,4 @@
-import Input from './Input';
+import Input from './TextField/Input';
 import type { FieldError } from 'react-hook-form';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {

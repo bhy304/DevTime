@@ -1,25 +1,19 @@
-import { Link } from "react-router-dom";
-import horizontalLogo from "@/assets/horizontal-logo.svg";
+import { Link } from 'react-router-dom';
+import HorizontalLogo from '@/shared/assets/horizontal-logo.svg?react';
 
 const Header = () => {
   return (
     <header className="flex w-full justify-between">
       <nav className="flex items-center">
-        <img src={horizontalLogo} alt="DevTime Logo" className="mr-12" />
+        <HorizontalLogo alt="DevTime Logo" className="mr-12" />
         <ul className="flex gap-9">
           <li>
-            <Link
-              to="/dashboard"
-              className="text-body text-indigo font-semibold hover:underline"
-            >
+            <Link to="/dashboard" className="text-body text-indigo font-semibold hover:underline">
               대시보드
             </Link>
           </li>
           <li>
-            <Link
-              to="/ranking"
-              className="text-body text-indigo font-semibold hover:underline"
-            >
+            <Link to="/ranking" className="text-body text-indigo font-semibold hover:underline">
               랭킹
             </Link>
           </li>
@@ -28,18 +22,12 @@ const Header = () => {
       <nav className="flex items-center">
         <ul className="flex gap-9">
           <li>
-            <Link
-              to="/login"
-              className="text-body text-indigo font-semibold hover:underline"
-            >
+            <Link to="/login" className="text-body text-indigo font-semibold hover:underline">
               로그인
             </Link>
           </li>
           <li>
-            <Link
-              to="/signup"
-              className="text-body text-indigo font-semibold hover:underline"
-            >
+            <Link to="/signup" className="text-body text-indigo font-semibold hover:underline">
               회원가입
             </Link>
           </li>

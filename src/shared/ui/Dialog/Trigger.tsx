@@ -1,5 +1,5 @@
-import Button from '@/shared/ui/Button';
 import { useDialogContext } from './DialogContext';
+import Button from '@/shared/ui/Button/Button';
 
 const Trigger = ({ children }: { children: React.ReactNode }) => {
   const { isOpen, setIsOpen } = useDialogContext();
