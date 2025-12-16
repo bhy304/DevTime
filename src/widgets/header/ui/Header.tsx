@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
-import HorizontalLogo from '@/shared/assets/horizontal-logo.svg?react';
+import { Link } from "react-router-dom";
+import HorizontalLogo from "@/shared/assets/horizontal-logo.svg?react";
 
 const Header = () => {
   return (
-    <header className="flex w-full justify-between">
+    <header className="mx-auto flex w-full max-w-[1200px] justify-between pt-4">
       <nav className="flex items-center">
         <HorizontalLogo alt="DevTime Logo" className="mr-12" />
         <ul className="flex gap-9">

@@ -1,6 +1,10 @@
+@import url("https://fonts.cdnfonts.com/css/digital-numbers");
 @import "tailwindcss";
 
 @theme {
+  /* Custom Fonts */
+  --font-digital: "Digital Numbers", sans-serif;
+
   /* Custom Colors */
   --color-primary: #4c79ff;
   --color-primary-light: #78b0ff;
