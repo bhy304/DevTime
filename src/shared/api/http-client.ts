@@ -1,4 +1,10 @@
-import axios, { type AxiosRequestConfig, type AxiosInstance } from 'axios';
+import { useAuthStore } from "@/entities/auth/model/authStore";
+import axios, { type AxiosRequestConfig, type AxiosInstance, type InternalAxiosRequestConfig, AxiosError } from "axios";
+import type { RefreshTokenResponse } from "../types/auth.type";
+
+interface AxiosRequestConfigWithRetry extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 class HttpClient {
   private axiosInstance: AxiosInstance;
@@ -6,17 +12,18 @@ class HttpClient {
   constructor(config?: AxiosRequestConfig) {
     this.axiosInstance = axios.create({
       baseURL: import.meta.env.VITE_API_URL,
+      timeout: 10000,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       ...config,
     });
 
     this.axiosInstance.interceptors.request.use(
-      (config) => {
-        const accessToken = localStorage.getItem('accessToken');
+      (config: InternalAxiosRequestConfig) => {
+        const accessToken = useAuthStore.getState().accessToken;
         if (accessToken) {
-          config.headers['Authorization'] = `Bearer ${accessToken}`;
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
         return config;
       },
@@ -29,33 +36,32 @@ class HttpClient {
       (response) => {
         return response;
       },
-      async (error) => {
+      async (error: AxiosError) => {
+        const originalRequest = error.config as AxiosRequestConfigWithRetry;
         if (
           error.response &&
           error.response.status === 401 &&
-          !error.config._retry &&
-          !error.config.url?.includes('/auth/refresh')
+          !originalRequest._retry &&
+          !originalRequest.url?.includes("/auth/refresh")
         ) {
-          error.config._retry = true;
+          originalRequest._retry = true;
 
           try {
-            const refreshToken = localStorage.getItem('refreshToken');
-            if (!refreshToken) throw new Error('refreshToken이 존재하지 않습니다.');
+            const refreshToken = useAuthStore.getState().refreshToken;
+            if (!refreshToken) throw new Error("refreshToken이 존재하지 않습니다.");
 
-            const token = await this.post<{ refreshToken: string }, { success: boolean; accessToken: string }>(
-              '/auth/refresh',
-              { refreshToken },
-            );
+            const token = await this.post<{ refreshToken: string }, RefreshTokenResponse>("/auth/refresh", {
+              refreshToken,
+            });
 
-            localStorage.setItem('accessToken', token.accessToken);
+            useAuthStore.getState().setAccessToken(token.accessToken);
 
-            error.config.headers['Authorization'] = `Bearer ${token.accessToken}`;
+            originalRequest.headers["Authorization"] = `Bearer ${token.accessToken}`;
 
-            return this.axiosInstance(error.config);
+            return this.axiosInstance(originalRequest);
           } catch (refreshError) {
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            window.location.href = '/login';
+            useAuthStore.getState().clearAuth();
+            window.location.href = "/login";
             return Promise.reject(refreshError);
           }
         }
