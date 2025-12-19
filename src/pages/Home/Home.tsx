@@ -7,7 +7,7 @@ const Home = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
-    <main className="flex h-screen w-screen flex-col items-center justify-center">
+    <main className="flex w-full grow flex-col items-center justify-center">
       <h1 className={cn("text-indigo mb-2.5 text-7xl font-bold", isAuthenticated ? "text-primary/30" : "")}>
         {isAuthenticated ? "오늘도 열심히 달려봐요!" : "WELCOME"}
       </h1>

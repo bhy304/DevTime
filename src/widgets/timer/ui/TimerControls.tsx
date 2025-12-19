@@ -57,10 +57,14 @@ const TimerControls = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
       <Start
         width={120}
         height={120}
-        className="hover:[&_path]:fill-primary hover:fill-path-opacity-1 cursor-pointer"
+        className="hover:[&_path]:fill-primary hover:[&_path]:fill-opacity-100 cursor-pointer"
         onClick={handleClick}
       />
-      <Pause width={120} height={120} className="hover:[&_path]:fill-primary hover:fill-opacity-1 cursor-pointer" />
+      <Pause
+        width={120}
+        height={120}
+        className="hover:[&_path]:fill-primary hover:[&_path]:fill-opacity-100 cursor-pointer"
+      />
       <Finish
         width={120}
         height={120}
