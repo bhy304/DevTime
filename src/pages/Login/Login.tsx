@@ -1,16 +1,16 @@
-import { Link, useNavigate } from 'react-router-dom';
-import SymbolLogo from '@/shared/assets/symbol-logo.svg?react';
-import VerticalLogo from '@/shared/assets/vertical-logo.svg?react';
-import Button from '@/shared/ui/Button/Button';
-import TextField from '@/shared/ui/TextField/TextField';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { loginSchema, type LoginSchema } from '@/entities/auth/model/auth.schema';
-import { useAuth } from '@/entities/auth/model/useAuth';
-import Dialog from '@/shared/ui/Dialog/Dialog';
-import { useState } from 'react';
-import { setTokens } from '@/shared/lib/auth';
-import type { LoginResponse } from '@/shared/types/auth.type';
+import { Link, useNavigate } from "react-router-dom";
+import SymbolLogo from "@/shared/assets/symbol-logo.svg?react";
+import VerticalLogo from "@/shared/assets/vertical-logo.svg?react";
+import Button from "@/shared/ui/Button/Button";
+import TextField from "@/shared/ui/TextField/TextField";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { loginSchema, type LoginSchema } from "@/entities/auth/model/auth.schema";
+import { useAuth } from "@/entities/auth/model/useAuth";
+import Dialog from "@/shared/ui/Dialog/Dialog";
+import { useState } from "react";
+import { setTokens } from "@/shared/lib/auth";
+import type { LoginResponse } from "@/shared/types/auth.type";
 
 type DialogState = {
   isOpen: boolean;
@@ -27,14 +27,14 @@ const Login = () => {
     formState: { errors, isValid },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
-    mode: 'all',
+    mode: "all",
   });
   const navigate = useNavigate();
   const { login } = useAuth();
   const [dialogState, setDialogState] = useState<DialogState>({
     isOpen: false,
-    title: '',
-    content: '',
+    title: "",
+    content: "",
     onClose: undefined,
   });
 
@@ -51,35 +51,29 @@ const Login = () => {
       const { accessToken, refreshToken, isFirstLogin, isDuplicateLogin } = response;
       setTokens(accessToken, refreshToken);
 
+      const targetPath = isFirstLogin ? "/profile" : "/";
+
       if (isDuplicateLogin) {
         setDialogState({
           isOpen: true,
-          title: '중복 로그인이 불가능합니다.',
+          title: "중복 로그인이 불가능합니다.",
           content:
-            '다른 기기에 중복 로그인 된 상태입니다. [확인] 버튼을 누르면 다른 기기에서 강제 로그아웃되며, 진행중이던 타이머가 있다면 기록이 자동 삭제됩니다.',
+            "다른 기기에 중복 로그인 된 상태입니다. [확인] 버튼을 누르면 다른 기기에서 강제 로그아웃되며, 진행중이던 타이머가 있다면 기록이 자동 삭제됩니다.",
           onClose: () => {
-            if (isFirstLogin) {
-              navigate('/profile', { replace: true });
-            } else {
-              navigate('/', { replace: true });
-            }
+            navigate(targetPath, { replace: true });
           },
         });
         return;
       }
 
-      if (isFirstLogin) {
-        navigate('/profile', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
+      navigate(targetPath, { replace: true });
     } else {
       setDialogState({
         isOpen: true,
-        title: '로그인 정보를 다시 확인해 주세요.',
-        content: '',
+        title: "로그인 정보를 다시 확인해 주세요.",
+        content: "",
         onClose: () => {
-          setFocus('email');
+          setFocus("email");
         },
       });
     }
@@ -98,22 +92,22 @@ const Login = () => {
             <TextField
               id="email"
               placeholder="이메일 주소를 입력해 주세요."
-              error={errors.email ? 'validation' : undefined}
+              error={errors.email ? "validation" : undefined}
             >
               <TextField.Fieldset>
                 <TextField.Label>아이디</TextField.Label>
-                <TextField.Input type="email" {...register('email')} />
+                <TextField.Input type="email" {...register("email")} />
                 <TextField.HelperText>{errors.email?.message}</TextField.HelperText>
               </TextField.Fieldset>
             </TextField>
             <TextField
               id="password"
               placeholder="비밀번호를 입력해 주세요."
-              error={errors.password ? 'validation' : undefined}
+              error={errors.password ? "validation" : undefined}
             >
               <TextField.Fieldset>
                 <TextField.Label>비밀번호</TextField.Label>
-                <TextField.Input type="password" {...register('password')} />
+                <TextField.Input type="password" {...register("password")} />
                 <TextField.HelperText>{errors.password?.message}</TextField.HelperText>
               </TextField.Fieldset>
             </TextField>
