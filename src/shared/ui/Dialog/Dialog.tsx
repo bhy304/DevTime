@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { DialogContext } from './DialogContext';
-import Trigger from './Trigger';
-import Content from './Content';
-import Title from './Title';
-import Description from './Description';
-import Footer from './Footer';
+import { useState } from "react";
+import { DialogContext } from "./DialogContext";
+import Trigger from "./Trigger";
+import Content from "./Content";
+import Title from "./Title";
+import Description from "./Description";
+import Footer from "./Footer";
 
 interface DialogProps {
   children: React.ReactNode;
