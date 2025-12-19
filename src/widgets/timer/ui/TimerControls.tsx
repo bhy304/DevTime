@@ -1,12 +1,10 @@
 import Start from "@/shared/assets/start.svg?react";
 import Pause from "@/shared/assets/pause.svg?react";
 import Finish from "@/shared/assets/finish.svg?react";
-import Dialog from "@/shared/ui/Dialog/Dialog";
-import Button from "@/shared/ui/Button/Button";
+import { Dialog, Button, TextField } from "@/shared/ui";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TextField from "@/shared/ui/TextField/TextField";
-import TodoItem from "./TodoItem";
+import TodoItem from "../../../entities/task/ui/TodoItem";
 import type { Task } from "@/entities/task/model/task.model";
 
 const tasks: Task[] = [

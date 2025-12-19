@@ -1,5 +1,5 @@
 import type { EndTimer, SplitTime, StartTimer } from "@/entities/timer/model/timer.model";
-import HttpClient from "./http-client";
+import HttpClient from "../../../shared/api/http-client";
 
 class TimerAPI extends HttpClient {
   getTimers = async () => {

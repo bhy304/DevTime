@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/entities/auth/model/authStore";
 import axios, { type AxiosRequestConfig, type AxiosInstance, type InternalAxiosRequestConfig, AxiosError } from "axios";
-import type { RefreshTokenResponse } from "../types/auth.type";
+import type { RefreshTokenResponse } from "@/entities/auth/model/auth.model";
 
 interface AxiosRequestConfigWithRetry extends InternalAxiosRequestConfig {
   _retry?: boolean;

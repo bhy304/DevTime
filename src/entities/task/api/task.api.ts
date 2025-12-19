@@ -1,5 +1,5 @@
 import type { Task } from "@/entities/task/model/task.model";
-import HttpClient from "./http-client";
+import HttpClient from "../../../shared/api/http-client";
 
 class TaskAPI extends HttpClient {
   updateTasks = async (studyLogId: string, tasks: Task[]) => {
