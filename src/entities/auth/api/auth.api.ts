@@ -1,4 +1,4 @@
-import HttpClient from "../../../shared/api/http-client";
+import HttpClient from "@/shared/api/http-client";
 import type { Auth } from "@/entities/auth/model/auth.model";
 import type {
   BaseResponse,

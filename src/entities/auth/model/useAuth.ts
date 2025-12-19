@@ -1,5 +1,5 @@
 import { type Auth } from "@/entities/auth/model/auth.model";
-import authApi from "@/shared/api/auth.api";
+import authApi from "../api/auth.api";
 import { errorHandler } from "@/shared/lib/error-handler";
 import { useAuthStore } from "./authStore";
 import { useNavigate } from "react-router-dom";
