@@ -1,5 +1,11 @@
-const Title = ({ children }: { children: React.ReactNode }) => {
-  return <h1 className="text-title font-semibold text-gray-800">{children}</h1>;
+import cn from "@/shared/lib/cn";
+
+interface TitleProps {
+  children: React.ReactNode;
+  className?: string;
+}
+const Title = ({ children, className }: TitleProps) => {
+  return <h1 className={cn("text-title font-semibold text-gray-800", className)}>{children}</h1>;
 };
 
 export default Title;
