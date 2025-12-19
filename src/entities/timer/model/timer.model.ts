@@ -1,11 +1,8 @@
+import type { Task } from "@/entities/task/model/task.model";
+
 export interface SplitTime {
   date: string;
   timeSpent: number;
-}
-
-export interface Task {
-  content: string;
-  isCompleted: boolean;
 }
 
 export interface Timer {
