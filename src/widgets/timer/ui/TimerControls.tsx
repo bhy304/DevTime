@@ -48,6 +48,7 @@ const TimerControls = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   const handleClick = () => {
     if (!isAuthenticated) {
       setOpen(true);
+      return;
     }
     // 타이머 시작
     setTodayGoalDialogOpen(true);
