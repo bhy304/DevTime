@@ -5,12 +5,11 @@ import HorizontalLogo from "@/shared/assets/horizontal-logo.svg?react";
 import Avatar from "@/shared/assets/avatar.svg?react";
 import User from "@/shared/assets/user.svg?react";
 import Logout from "@/shared/assets/logout.svg?react";
-import { useAuth } from "@/entities/auth/model/useAuth";
+import { authService } from "@/features/auth.service";
 
 const Header = () => {
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const { logout } = useAuth();
 
   return (
     <header className="mx-auto flex w-full max-w-[1200px] justify-between pt-4">
@@ -48,7 +47,7 @@ const Header = () => {
                     </div>
                   </Dropdown.Item>
                   <Dropdown.Separator />
-                  <Dropdown.Item onClick={() => logout()}>
+                  <Dropdown.Item onClick={() => authService.logout()}>
                     <div className="flex gap-4">
                       <Logout width={20} height={20} />
                       로그아웃

@@ -93,22 +93,18 @@ const TimerControls = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
         <Dialog.Content className="min-w-[640px]">
           <Dialog.Title className="mb-9 text-4xl font-bold">
             <TextField id="title" placeholder="오늘의 목표">
-              <TextField.Fieldset>
-                <TextField.Input type="text" />
-              </TextField.Fieldset>
+              <TextField.Input type="text" />
             </TextField>
           </Dialog.Title>
 
           <TextField id="todo" placeholder="할 일을 추가해 주세요.">
-            <TextField.Fieldset>
-              <TextField.Label>할 일 목록</TextField.Label>
-              <div className="flex items-center">
-                <TextField.Input type="text" />
-                <TextField.Button priority="tertiary" onClick={() => {}} disabled={true}>
-                  추가
-                </TextField.Button>
-              </div>
-            </TextField.Fieldset>
+            <TextField.Label>할 일 목록</TextField.Label>
+            <div className="flex items-center">
+              <TextField.Input type="text" />
+              <TextField.Button priority="tertiary" onClick={() => {}} disabled={true}>
+                추가
+              </TextField.Button>
+            </div>
           </TextField>
           <div className="no-scrollbar scrollbar-hide wrap-break-words my-9 h-[568px] min-w-[460px] overflow-auto leading-relaxed whitespace-pre-wrap [&::-webkit-scrollbar]:hidden">
             <ul className="flex flex-col gap-3">

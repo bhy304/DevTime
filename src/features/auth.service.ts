@@ -1,7 +1,7 @@
 import type { Auth } from "@/entities/auth/model/auth.model";
-import authApi from "@/shared/api/auth.api";
+import authApi from "@/entities/auth/api/auth.api";
 import { errorHandler } from "@/shared/lib/error-handler";
-import type { LoginResponse, BaseResponse } from "@/shared/types/auth.type";
+import type { LoginResponse, BaseResponse } from "@/entities/auth/model/auth.model";
 
 export const authService = {
   signup: async (data: Auth) => {

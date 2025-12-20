@@ -1,5 +1,5 @@
 import { isAxiosError, type AxiosError } from "axios";
-import type { BaseResponse } from "../types/auth.type";
+import type { BaseResponse } from "@/entities/auth/model/auth.model";
 
 export const errorHandler = <T extends BaseResponse>(error: AxiosError | unknown): T => {
   console.error("에러 발생:", error);
