@@ -1,21 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import SymbolLogo from "@/shared/assets/symbol-logo.svg?react";
 import VerticalLogo from "@/shared/assets/vertical-logo.svg?react";
+import Button from "@/shared/ui/Button/Button";
+import TextField from "@/shared/ui/TextField/TextField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginSchema, type LoginSchema } from "@/entities/auth/model/auth.schema";
-import { useAuth } from "@/entities/auth/model/useAuth";
+import {
+  loginSchema,
+  type LoginSchema,
+} from "@/entities/auth/model/auth.schema";
+import Dialog from "@/shared/ui/Dialog/Dialog";
 import { useState } from "react";
 import { setTokens } from "@/shared/lib/auth";
-import type { LoginResponse } from "@/entities/auth/model/auth.model";
-import { Dialog, Button, TextField } from "@/shared/ui";
-
-type DialogState = {
-  isOpen: boolean;
-  title: string;
-  content?: string;
-  onClose?: () => void;
-};
+import { type DialogState } from "@/shared/types/dialog.type";
+import { authService } from "@/features/auth.service";
 
 const Login = () => {
   const {
@@ -28,7 +26,6 @@ const Login = () => {
     mode: "all",
   });
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [dialogState, setDialogState] = useState<DialogState>({
     isOpen: false,
     title: "",
@@ -43,10 +40,11 @@ const Login = () => {
   };
 
   const onSubmit = handleSubmit(async (data: LoginSchema) => {
-    const response = (await login(data)) as LoginResponse;
+    const response = await authService.login(data);
 
     if (response && response.success) {
-      const { accessToken, refreshToken, isFirstLogin, isDuplicateLogin } = response;
+      const { accessToken, refreshToken, isFirstLogin, isDuplicateLogin } =
+        response;
       setTokens(accessToken, refreshToken);
 
       const targetPath = isFirstLogin ? "/profile" : "/";
@@ -85,29 +83,34 @@ const Login = () => {
       <section className="mx-20 min-h-[598px] min-w-[500px] rounded-[10px] bg-white/50 shadow-[0_40px_100px_40px_rgba(3,104,255,0.05)] backdrop-blur-[50px]">
         <div className="mx-[86px]">
           <form onSubmit={onSubmit} className="">
-            <VerticalLogo width={132} height={100} className="mx-auto mt-[72px] mb-12" aria-label="DevTime Logo" />
+            <VerticalLogo
+              width={132}
+              height={100}
+              className="mx-auto mt-[72px] mb-12"
+              aria-label="DevTime Logo"
+            />
 
             <TextField
               id="email"
               placeholder="이메일 주소를 입력해 주세요."
               error={errors.email ? "validation" : undefined}
             >
-              <TextField.Fieldset>
-                <TextField.Label>아이디</TextField.Label>
-                <TextField.Input type="email" {...register("email")} />
-                <TextField.HelperText>{errors.email?.message}</TextField.HelperText>
-              </TextField.Fieldset>
+              <TextField.Label>아이디</TextField.Label>
+              <TextField.Input type="email" {...register("email")} />
+              <TextField.HelperText>
+                {errors.email?.message}
+              </TextField.HelperText>
             </TextField>
             <TextField
               id="password"
               placeholder="비밀번호를 입력해 주세요."
               error={errors.password ? "validation" : undefined}
             >
-              <TextField.Fieldset>
-                <TextField.Label>비밀번호</TextField.Label>
-                <TextField.Input type="password" {...register("password")} />
-                <TextField.HelperText>{errors.password?.message}</TextField.HelperText>
-              </TextField.Fieldset>
+              <TextField.Label>비밀번호</TextField.Label>
+              <TextField.Input type="password" {...register("password")} />
+              <TextField.HelperText>
+                {errors.password?.message}
+              </TextField.HelperText>
             </TextField>
 
             <Button size="large" type="submit" disabled={!isValid}>

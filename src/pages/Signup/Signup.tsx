@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Button from "@/shared/ui/Button/Button";
+import Checkbox from "@/shared/ui/Checkbox/Checkbox";
+import TextField from "@/shared/ui/TextField/TextField";
 import { TERMS_TEXT } from "@/shared/config/legal";
 import VerticalWhiteLogo from "@/shared/assets/vertical-white-logo.svg";
-import { useAuth } from "@/entities/auth/model/useAuth";
 import { useForm } from "react-hook-form";
 import { type Auth } from "@/entities/auth/model/auth.model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupSchema } from "@/entities/auth/model/auth.schema";
-import type { CheckDuplicateResponse } from "@/entities/auth/model/auth.model";
-import { Button, Checkbox, TextField } from "@/shared/ui";
+import { validationService } from "@/features/validation.service";
+import { authService } from "@/features/auth.service";
 
 const Signup = () => {
   const {
@@ -27,7 +29,6 @@ const Signup = () => {
   const nickname = watch("nickname");
 
   const navigate = useNavigate();
-  const { signup, checkEmail, checkNickname } = useAuth();
 
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
@@ -69,7 +70,7 @@ const Signup = () => {
 
     try {
       const { email } = getValues();
-      const result = (await checkEmail({ email })) as CheckDuplicateResponse;
+      const result = await validationService.checkEmail({ email });
       if (result?.available) {
         setEmailCheckMessage(result.message);
         setIsEmailChecked(true);
@@ -93,7 +94,7 @@ const Signup = () => {
 
     try {
       const { nickname } = getValues();
-      const result = (await checkNickname({ nickname })) as CheckDuplicateResponse;
+      const result = await validationService.checkNickname({ nickname });
       if (result?.available) {
         setNicknameCheckMessage(result.message);
         setIsNicknameChecked(true);
@@ -112,12 +113,19 @@ const Signup = () => {
   };
 
   const onSubmit = handleSubmit(async (data: Auth) => {
-    const result = await signup(data);
+    const result = await authService.signup(data);
 
     if (result?.success) {
       navigate("/login", { replace: true });
     }
   });
+
+  const getFieldErrorType = (field: keyof SignupSchema) => {
+    if (errors[field]) return "validation";
+    if (field === "email" && !!email?.trim() && !isEmailChecked) return "unverified";
+    if (field === "nickname" && !!nickname?.trim() && !isNicknameChecked) return "unverified";
+    return undefined;
+  };
 
   return (
     <main className="grid h-screen w-full grid-cols-2">
@@ -129,71 +137,49 @@ const Signup = () => {
         <div className="mx-auto w-full max-w-sm">
           <h1 className="text-heading text-primary mb-9 text-center font-bold">회원가입</h1>
           <form onSubmit={onSubmit} className="space-y-4">
-            <TextField
-              id="email"
-              placeholder="이메일 주소 형식으로 입력해 주세요."
-              error={errors.email ? "validation" : !!email?.trim() && !isEmailChecked ? "unverified" : undefined}
-            >
-              <TextField.Fieldset>
-                <TextField.Label>아이디</TextField.Label>
-                <div className="flex gap-3">
-                  <TextField.Input type="email" {...register("email", { onBlur: handleEmailBlur })} />
-                  <TextField.Button
-                    type="button"
-                    priority="tertiary"
-                    disabled={!email?.trim() || !!errors.email}
-                    onClick={handleCheckEmail}
-                  >
-                    중복 확인
-                  </TextField.Button>
-                </div>
-                <TextField.HelperText>{errors.email?.message || emailCheckMessage}</TextField.HelperText>
-              </TextField.Fieldset>
+            <TextField id="email" placeholder="이메일 주소 형식으로 입력해 주세요." error={getFieldErrorType("email")}>
+              <TextField.Label>아이디</TextField.Label>
+              <div className="flex gap-3">
+                <TextField.Input type="email" {...register("email", { onBlur: handleEmailBlur })} />
+                <TextField.Button
+                  type="button"
+                  priority="tertiary"
+                  disabled={!email?.trim() || !!errors.email}
+                  onClick={handleCheckEmail}
+                >
+                  중복 확인
+                </TextField.Button>
+              </div>
+              <TextField.HelperText>{errors.email?.message || emailCheckMessage}</TextField.HelperText>
             </TextField>
-            <TextField
-              id="nickname"
-              placeholder="닉네임을 입력해 주세요."
-              error={
-                errors.nickname ? "validation" : !!nickname?.trim() && !isNicknameChecked ? "unverified" : undefined
-              }
-            >
-              <TextField.Fieldset>
-                <TextField.Label>닉네임</TextField.Label>
-                <div className="flex gap-3">
-                  <TextField.Input {...register("nickname", { onBlur: handleNicknameBlur })} />
-                  <TextField.Button
-                    type="button"
-                    priority="tertiary"
-                    disabled={!nickname?.trim() || !!errors.nickname}
-                    onClick={handleCheckNickname}
-                  >
-                    중복 확인
-                  </TextField.Button>
-                </div>
-                <TextField.HelperText>{errors.nickname?.message || nicknameCheckMessage}</TextField.HelperText>
-              </TextField.Fieldset>
+            <TextField id="nickname" placeholder="닉네임을 입력해 주세요." error={getFieldErrorType("nickname")}>
+              <TextField.Label>닉네임</TextField.Label>
+              <div className="flex gap-3">
+                <TextField.Input {...register("nickname", { onBlur: handleNicknameBlur })} />
+                <TextField.Button
+                  type="button"
+                  priority="tertiary"
+                  disabled={!nickname?.trim() || !!errors.nickname}
+                  onClick={handleCheckNickname}
+                >
+                  중복 확인
+                </TextField.Button>
+              </div>
+              <TextField.HelperText>{errors.nickname?.message || nicknameCheckMessage}</TextField.HelperText>
             </TextField>
-            <TextField
-              id="password"
-              placeholder="비밀번호를 입력해 주세요."
-              error={errors.password ? "validation" : undefined}
-            >
-              <TextField.Fieldset>
-                <TextField.Label>비밀번호</TextField.Label>
-                <TextField.Input type="password" {...register("password")} />
-                <TextField.HelperText>{errors.password?.message}</TextField.HelperText>
-              </TextField.Fieldset>
+            <TextField id="password" placeholder="비밀번호를 입력해 주세요." error={getFieldErrorType("password")}>
+              <TextField.Label>비밀번호</TextField.Label>
+              <TextField.Input type="password" {...register("password")} />
+              <TextField.HelperText>{errors.password?.message}</TextField.HelperText>
             </TextField>
             <TextField
               id="confirmPassword"
               placeholder="비밀번호를 입력해 주세요."
-              error={errors.confirmPassword ? "validation" : undefined}
+              error={getFieldErrorType("confirmPassword")}
             >
-              <TextField.Fieldset>
-                <TextField.Label>비밀번호 확인</TextField.Label>
-                <TextField.Input type="password" {...register("confirmPassword")} />
-                <TextField.HelperText>{errors.confirmPassword?.message}</TextField.HelperText>
-              </TextField.Fieldset>
+              <TextField.Label>비밀번호 확인</TextField.Label>
+              <TextField.Input type="password" {...register("confirmPassword")} />
+              <TextField.HelperText>{errors.confirmPassword?.message}</TextField.HelperText>
             </TextField>
             <fieldset className="mb-9 border-0 p-0">
               <div className="mb-2 flex justify-between">
