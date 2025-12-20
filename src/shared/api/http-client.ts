@@ -61,7 +61,7 @@ class HttpClient {
             return this.axiosInstance(originalRequest);
           } catch (refreshError) {
             useAuthStore.getState().clearAuth();
-            window.location.href = "/login";
+            window.location.replace("/login");
             return Promise.reject(refreshError);
           }
         }

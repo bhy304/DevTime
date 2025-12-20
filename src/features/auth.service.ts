@@ -2,6 +2,7 @@ import type { Auth } from "@/entities/auth/model/auth.model";
 import authApi from "@/entities/auth/api/auth.api";
 import { errorHandler } from "@/shared/lib/error-handler";
 import type { LoginResponse, BaseResponse } from "@/entities/auth/model/auth.model";
+import { useAuthStore } from "@/entities/auth/model/authStore";
 
 export const authService = {
   signup: async (data: Auth) => {
@@ -23,6 +24,9 @@ export const authService = {
       return await authApi.logout();
     } catch (error) {
       return errorHandler<BaseResponse>(error);
+    } finally {
+      useAuthStore.getState().clearAuth();
+      window.location.replace("/login");
     }
   },
 };
