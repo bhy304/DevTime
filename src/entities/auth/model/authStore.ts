@@ -35,10 +35,8 @@ export const useAuthStore = create<AuthStore>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
       }),
-      // 새로고침시 스토어가 복구될 때 실행
-      // 토큰이 존재하면 isAuthenticated를 true로 변경
       onRehydrateStorage: () => (state) => {
-        if (state?.accessToken) {
+        if (state?.accessToken && state?.refreshToken) {
           state.isAuthenticated = true;
         }
       },

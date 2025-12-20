@@ -5,15 +5,12 @@ import Button from "@/shared/ui/Button/Button";
 import TextField from "@/shared/ui/TextField/TextField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  loginSchema,
-  type LoginSchema,
-} from "@/entities/auth/model/auth.schema";
+import { loginSchema, type LoginSchema } from "@/entities/auth/model/auth.schema";
 import Dialog from "@/shared/ui/Dialog/Dialog";
 import { useState } from "react";
-import { setTokens } from "@/shared/lib/auth";
 import { type DialogState } from "@/shared/types/dialog.type";
 import { authService } from "@/features/auth.service";
+import { useAuthStore } from "@/entities/auth/model/authStore";
 
 const Login = () => {
   const {
@@ -26,6 +23,7 @@ const Login = () => {
     mode: "all",
   });
   const navigate = useNavigate();
+  const setAuthTokens = useAuthStore((state) => state.setTokens);
   const [dialogState, setDialogState] = useState<DialogState>({
     isOpen: false,
     title: "",
@@ -43,9 +41,8 @@ const Login = () => {
     const response = await authService.login(data);
 
     if (response && response.success) {
-      const { accessToken, refreshToken, isFirstLogin, isDuplicateLogin } =
-        response;
-      setTokens(accessToken, refreshToken);
+      const { accessToken, refreshToken, isFirstLogin, isDuplicateLogin } = response;
+      setAuthTokens(accessToken, refreshToken);
 
       const targetPath = isFirstLogin ? "/profile" : "/";
 
@@ -83,12 +80,7 @@ const Login = () => {
       <section className="mx-20 min-h-[598px] min-w-[500px] rounded-[10px] bg-white/50 shadow-[0_40px_100px_40px_rgba(3,104,255,0.05)] backdrop-blur-[50px]">
         <div className="mx-[86px]">
           <form onSubmit={onSubmit} className="">
-            <VerticalLogo
-              width={132}
-              height={100}
-              className="mx-auto mt-[72px] mb-12"
-              aria-label="DevTime Logo"
-            />
+            <VerticalLogo width={132} height={100} className="mx-auto mt-[72px] mb-12" aria-label="DevTime Logo" />
 
             <TextField
               id="email"
@@ -97,9 +89,7 @@ const Login = () => {
             >
               <TextField.Label>아이디</TextField.Label>
               <TextField.Input type="email" {...register("email")} />
-              <TextField.HelperText>
-                {errors.email?.message}
-              </TextField.HelperText>
+              <TextField.HelperText>{errors.email?.message}</TextField.HelperText>
             </TextField>
             <TextField
               id="password"
@@ -108,9 +98,7 @@ const Login = () => {
             >
               <TextField.Label>비밀번호</TextField.Label>
               <TextField.Input type="password" {...register("password")} />
-              <TextField.HelperText>
-                {errors.password?.message}
-              </TextField.HelperText>
+              <TextField.HelperText>{errors.password?.message}</TextField.HelperText>
             </TextField>
 
             <Button size="large" type="submit" disabled={!isValid}>
