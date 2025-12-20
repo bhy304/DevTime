@@ -24,11 +24,11 @@ const Input = forwardRef<HTMLInputElement, React.ComponentProps<"input"> & { cla
 
     return (
       <input
-        {...props}
         ref={ref}
         id={id}
         name={id}
         placeholder={placeholder}
+        {...props}
         className={cn(inputVariants({ status: error === "validation" ? "error" : "default" }), className)}
       />
     );

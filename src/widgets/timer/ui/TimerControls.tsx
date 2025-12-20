@@ -1,55 +1,50 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Start from "@/shared/assets/start.svg?react";
 import Pause from "@/shared/assets/pause.svg?react";
 import Finish from "@/shared/assets/finish.svg?react";
 import { Dialog, Button, TextField } from "@/shared/ui";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import TodoItem from "../../../entities/task/ui/TodoItem";
-import type { Task } from "@/entities/task/model/task.model";
-
-const tasks: Task[] = [
-  {
-    content: "코딩테스트 문제 1개 풀어보기",
-    isCompleted: false,
-  },
-  {
-    content: "온라인 강의 Chapter 3 듣기",
-    isCompleted: false,
-  },
-  {
-    content: "프로젝트 코드 리팩토링하기",
-    isCompleted: false,
-  },
-  {
-    content: "프로젝트 코드 리팩토링하기",
-    isCompleted: false,
-  },
-  {
-    content: "기술 면접 빈출 문항 답변 정리하기",
-    isCompleted: false,
-  },
-  {
-    content: "기술 블로그 작성하기",
-    isCompleted: false,
-  },
-  {
-    content: "오늘 공부한 내용 TIL 작성하기",
-    isCompleted: false,
-  },
-];
+import { timerSchema, type TimerSchema } from "@/entities/timer/model/timer.schema";
+import TodoItem from "@/entities/task/ui/TodoItem";
 
 const TimerControls = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+  const { register, control, reset } = useForm<TimerSchema>({
+    resolver: zodResolver(timerSchema),
+    mode: "onChange",
+    defaultValues: {
+      todayGoal: "",
+      tasks: [],
+    },
+  });
+  const { fields, append, remove, update } = useFieldArray({
+    control,
+    name: "tasks",
+  });
+
+  const todayGoal = useWatch({
+    control,
+    name: "todayGoal",
+  });
+
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [todayGoalDialogOpen, setTodayGoalDialogOpen] = useState(false);
+  const [task, setTask] = useState("");
 
   const handleClick = () => {
     if (!isAuthenticated) {
       setOpen(true);
       return;
     }
-    // 타이머 시작
     setTodayGoalDialogOpen(true);
+  };
+
+  const handleAddTask = () => {
+    if (task.trim().length === 0) return;
+    append({ task: task });
+    setTask("");
   };
 
   return (
@@ -89,39 +84,58 @@ const TimerControls = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
           </Dialog.Footer>
         </Dialog.Content>
       </Dialog>
+
       <Dialog open={todayGoalDialogOpen}>
         <Dialog.Content className="min-w-[640px]">
           <Dialog.Title className="mb-9 text-4xl font-bold">
             <TextField id="title" placeholder="오늘의 목표">
-              <TextField.Input type="text" />
+              <TextField.Input type="text" {...register("todayGoal")} className="text-indigo" />
             </TextField>
           </Dialog.Title>
-
           <TextField id="todo" placeholder="할 일을 추가해 주세요.">
             <TextField.Label>할 일 목록</TextField.Label>
             <div className="flex items-center">
-              <TextField.Input type="text" />
-              <TextField.Button priority="tertiary" onClick={() => {}} disabled={true}>
+              <TextField.Input
+                type="text"
+                value={task}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask(e.target.value)}
+              />
+              <TextField.Button priority="tertiary" onClick={handleAddTask} disabled={!task.trim()}>
                 추가
               </TextField.Button>
             </div>
           </TextField>
           <div className="no-scrollbar scrollbar-hide wrap-break-words my-9 h-[568px] min-w-[460px] overflow-auto leading-relaxed whitespace-pre-wrap [&::-webkit-scrollbar]:hidden">
             <ul className="flex flex-col gap-3">
-              {tasks.map((task) => (
-                <TodoItem key={task.content} defaultValue={task.content} task={task} />
+              {fields.map((field, index) => (
+                <TodoItem
+                  key={field.id}
+                  index={index}
+                  task={field.task}
+                  onUpdate={(index, value) => update(index, { task: value })}
+                  onDelete={(index) => remove(index)}
+                />
               ))}
             </ul>
           </div>
           <Dialog.Footer>
-            <Button priority="tertiary" onClick={() => setTodayGoalDialogOpen(false)}>
+            <Button
+              priority="tertiary"
+              onClick={() => {
+                setTodayGoalDialogOpen(false);
+                remove();
+                reset();
+              }}
+            >
               취소
             </Button>
             <Button
               priority="tertiary"
-              disabled={true}
+              disabled={!todayGoal?.trim() || !fields.length}
               onClick={() => {
                 setTodayGoalDialogOpen(false);
+                remove();
+                reset();
               }}
             >
               타이머 시작하기

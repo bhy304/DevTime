@@ -81,7 +81,6 @@ const Login = () => {
         <div className="mx-[86px]">
           <form onSubmit={onSubmit} className="">
             <VerticalLogo width={132} height={100} className="mx-auto mt-[72px] mb-12" aria-label="DevTime Logo" />
-
             <TextField
               id="email"
               placeholder="이메일 주소를 입력해 주세요."
@@ -100,7 +99,6 @@ const Login = () => {
               <TextField.Input type="password" {...register("password")} />
               <TextField.HelperText>{errors.password?.message}</TextField.HelperText>
             </TextField>
-
             <Button size="large" type="submit" disabled={!isValid}>
               로그인
             </Button>
