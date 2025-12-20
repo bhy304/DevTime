@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  /* Custom Colors */
+  --color-primary: #4c79ff;
+  --color-primary-light: #78b0ff;
+
+  --color-indigo: #023e99;
+  --color-informative: #2563eb;
+  --color-negative: #dc2626;
+  --color-notice: #fbbf24;
+  --color-positive: #22c55e;
+  --color-fuchsia: #fd28ec;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f0f2f5;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #ccd0d6;
+  --color-gray-400: #969da8;
+  --color-gray-500: #717887;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #394252;
+  --color-gray-800: #1f2937;
+
+  --color-state-disabled: #969da8;
+
+  /* Custom Font Sizes */
+  --text-heading: 1.5rem;
+  --text-heading--line-height: calc(1.5rem * 1.25); /* 30px */
+  --text-title: 1.25rem;
+  --text-title--line-height: calc(1.25rem * 1.2); /* 24px */
+  --text-subtitle: 1.125rem;
+  --text-subtitle--line-height: calc(1.125rem * 1.2222222222); /* 22px */
+  --text-body: 1rem;
+  --text-body--line-height: calc(1rem * 1.25); /* 20px */
+  --text-bodysmall: 0.875rem;
+  --text-bodysmall--line-height: calc(0.875rem * 1.285714286); /* 18px */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: calc(0.75rem * 1.333333333); /* 16px */
+  --text-label: 0.625rem;
+  --text-label--line-height: calc(0.625rem * 1.2); /* 12px */
+}
+
+@layer base {
+  * {
+    @apply m-0 box-border p-0;
+  }
+
+  body {
+    @apply font-sans text-base;
+    font-family: "Pretendard", sans-serif;
+  }
+
+  button,
+  input {
+    @apply border-0 outline-none;
+  }
+
+  ol,
+  ul,
+  li {
+    @apply m-0 list-none p-0;
+  }
+
+  a {
+    @apply no-underline;
+  }
+
+  fieldset {
+    @apply border-0;
+  }
+}
