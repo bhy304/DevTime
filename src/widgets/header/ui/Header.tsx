@@ -5,7 +5,7 @@ import HorizontalLogo from "@/shared/assets/horizontal-logo.svg?react";
 import Avatar from "@/shared/assets/avatar.svg?react";
 import User from "@/shared/assets/user.svg?react";
 import Logout from "@/shared/assets/logout.svg?react";
-import { authService } from "@/features/auth.service";
+import { authService } from "@/features/auth/api/auth.service";
 
 const Header = () => {
   const navigate = useNavigate();

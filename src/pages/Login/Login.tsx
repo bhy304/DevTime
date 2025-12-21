@@ -9,8 +9,8 @@ import { loginSchema, type LoginSchema } from "@/entities/auth/model/auth.schema
 import Dialog from "@/shared/ui/Dialog/Dialog";
 import { useState } from "react";
 import { type DialogState } from "@/shared/types/dialog.type";
-import { authService } from "@/features/auth.service";
 import { useAuthStore } from "@/entities/auth/model/authStore";
+import { authService } from "@/features/auth/api/auth.service";
 
 const Login = () => {
   const {

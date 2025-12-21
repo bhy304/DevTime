@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import { type Auth } from "@/entities/auth/model/auth.model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupSchema } from "@/entities/auth/model/auth.schema";
-import { validationService } from "@/features/validation.service";
-import { authService } from "@/features/auth.service";
+import { validationService } from "@/features/auth/api/validation.service";
+import { authService } from "@/features/auth/api/auth.service";
 
 const Signup = () => {
   const {
