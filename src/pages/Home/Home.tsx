@@ -4,7 +4,7 @@ import { useAuthStore } from "@/entities/auth/model/authStore";
 import cn from "@/shared/lib/cn";
 
 const Home = () => {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
 
   return (
     <main className="flex w-full grow flex-col items-center justify-center">
