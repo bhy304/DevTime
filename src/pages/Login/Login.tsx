@@ -8,9 +8,9 @@ import { useForm } from "react-hook-form";
 import { loginSchema, type LoginSchema } from "@/entities/auth/model/auth.schema";
 import Dialog from "@/shared/ui/Dialog/Dialog";
 import { useState } from "react";
-import { setTokens } from "@/shared/lib/auth";
 import { type DialogState } from "@/shared/types/dialog.type";
-import { authService } from "@/features/auth.service";
+import { useAuthStore } from "@/entities/auth/model/authStore";
+import { authService } from "@/features/auth/api/auth.service";
 
 const Login = () => {
   const {
@@ -23,6 +23,7 @@ const Login = () => {
     mode: "all",
   });
   const navigate = useNavigate();
+  const setAuthTokens = useAuthStore((state) => state.setTokens);
   const [dialogState, setDialogState] = useState<DialogState>({
     isOpen: false,
     title: "",
@@ -41,7 +42,9 @@ const Login = () => {
 
     if (response && response.success) {
       const { accessToken, refreshToken, isFirstLogin, isDuplicateLogin } = response;
-      setTokens(accessToken, refreshToken);
+      setAuthTokens(accessToken, refreshToken);
+
+      const targetPath = isFirstLogin ? "/profile" : "/";
 
       if (isDuplicateLogin) {
         setDialogState({
@@ -50,21 +53,13 @@ const Login = () => {
           content:
             "다른 기기에 중복 로그인 된 상태입니다. [확인] 버튼을 누르면 다른 기기에서 강제 로그아웃되며, 진행중이던 타이머가 있다면 기록이 자동 삭제됩니다.",
           onClose: () => {
-            if (isFirstLogin) {
-              navigate("/profile", { replace: true });
-            } else {
-              navigate("/", { replace: true });
-            }
+            navigate(targetPath, { replace: true });
           },
         });
         return;
       }
 
-      if (isFirstLogin) {
-        navigate("/profile", { replace: true });
-      } else {
-        navigate("/", { replace: true });
-      }
+      navigate(targetPath, { replace: true });
     } else {
       setDialogState({
         isOpen: true,
@@ -86,7 +81,6 @@ const Login = () => {
         <div className="mx-[86px]">
           <form onSubmit={onSubmit} className="">
             <VerticalLogo width={132} height={100} className="mx-auto mt-[72px] mb-12" aria-label="DevTime Logo" />
-
             <TextField
               id="email"
               placeholder="이메일 주소를 입력해 주세요."
@@ -105,7 +99,6 @@ const Login = () => {
               <TextField.Input type="password" {...register("password")} />
               <TextField.HelperText>{errors.password?.message}</TextField.HelperText>
             </TextField>
-
             <Button size="large" type="submit" disabled={!isValid}>
               로그인
             </Button>

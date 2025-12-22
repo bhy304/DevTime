@@ -12,6 +12,7 @@ const buttonVariants = cva(
           'bg-blue-50 text-primary hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400',
         tertiary:
           'bg-gray-50 text-primary hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400',
+        none: 'bg-transparent p-0 border-none'
       },
       size: {
         large: 'w-full',
