@@ -7,7 +7,7 @@ interface User {
 }
 
 interface AuthStore {
-  isAuthenticated: boolean;
+  isAuthenticated: () => boolean;
   accessToken: string | null;
   refreshToken: string | null;
   user: User | null;
@@ -19,15 +19,15 @@ interface AuthStore {
 
 export const useAuthStore = create<AuthStore>()(
   persist(
-    (set) => ({
-      isAuthenticated: false,
+    (set, get) => ({
+      isAuthenticated: () => !!get().accessToken,
       accessToken: null,
       refreshToken: null,
       user: null,
       setUser: (user) => set({ user }),
-      setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken, isAuthenticated: true }),
+      setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken }),
       setAccessToken: (accessToken) => set({ accessToken }),
-      clearAuth: () => set({ accessToken: null, refreshToken: null, user: null, isAuthenticated: false }),
+      clearAuth: () => set({ accessToken: null, refreshToken: null, user: null }),
     }),
     {
       name: "auth-store",
@@ -35,11 +35,6 @@ export const useAuthStore = create<AuthStore>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
       }),
-      onRehydrateStorage: () => (state) => {
-        if (state?.accessToken && state?.refreshToken) {
-          state.isAuthenticated = true;
-        }
-      },
     },
   ),
 );

@@ -9,7 +9,8 @@ import { authService } from "@/features/auth/api/auth.service";
 
 const Header = () => {
   const navigate = useNavigate();
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
+  const clearAuth = useAuthStore((state) => state.clearAuth);
 
   return (
     <header className="mx-auto flex w-full max-w-[1200px] justify-between pt-4">
@@ -47,7 +48,13 @@ const Header = () => {
                     </div>
                   </Dropdown.Item>
                   <Dropdown.Separator />
-                  <Dropdown.Item onClick={() => authService.logout()}>
+                  <Dropdown.Item
+                    onClick={() => {
+                      authService.logout();
+                      clearAuth();
+                      navigate("/login");
+                    }}
+                  >
                     <div className="flex gap-4">
                       <Logout width={20} height={20} />
                       로그아웃
